@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.6.0",
     "mysql": "^2.18.1",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "serverless-mysql": "^1.5.4"
+    "serverless-mysql": "^1.5.4",
+    "solc": "^0.8.13",
+    "web3": "^1.7.3"
   },
   "devDependencies": {
     "eslint": "8.15.0",
