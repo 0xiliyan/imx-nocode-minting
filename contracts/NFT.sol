@@ -2,11 +2,11 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 // OpenZeppelin's ERC721 implementation (it's a standard, so let it be)
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 // IMXMethods.sol is an abstracted implementation of IMX-required interfaces (IMintable as well as Ownable)
 // OZ's Ownable implementation, implementes owner() and onlyOwner
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
 // IMintable interface that defines the mintFor method
 // IMintable interface that's necessary for withdrawal of L2-minted tokens to L1
