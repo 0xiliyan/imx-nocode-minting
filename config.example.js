@@ -10,6 +10,8 @@ export default {
     alchemyApiKeyRopsten: 'https://eth-ropsten.alchemyapi.io/v2/your_api_key',
     // Immutable X Generic Configurations
     // to submit a new contract for registration on immutable x use: https://submitcontract.x.immutable.com/
+    linkSDK: 'https://link.x.immutable.com',
+    linkSDKRopsten: 'https://link.ropsten.x.immutable.com',
     publicApiUrl: 'https://api.x.immutable.com/v1',
     publicApiUrlRopsten: 'https://api.ropsten.x.immutable.com/v1',
     publicApiUrlV2: 'https://api.x.immutable.com/v2',
