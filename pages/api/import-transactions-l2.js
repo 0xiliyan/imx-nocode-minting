@@ -19,30 +19,39 @@ export default function handler(req, res) {
  */
 const importTransactionsL2 = async (req, res) => {
     const projectId = req.query.project_id;
+    let cursor = '';
+    let remaining = 1;
 
-    // while (true) {
+    while (true) {
         console.log('Looking for transactions to import ...');
 
-        const response = await axios.get(`https://api.ropsten.x.immutable.com/v1/transfers?receiver=${config.minterAddress}&status=success&token_type=ETH`);
-        const transactions = response.data.result;
+        while (remaining > 0) {
+            const {data} = await axios.get(`https://api.ropsten.x.immutable.com/v1/transfers?receiver=${config.minterAddress}&status=success&token_type=ETH&cursor=${cursor}`);
+            const transactions = data.result;
 
-        transactions.forEach(async (transaction) => {
-            const etherValue = parseFloat(ethers.utils.formatEther(transaction.token.data.quantity));
-            const tokensAllowed = etherValue / config.mintCost;
+            transactions.forEach(async (transaction) => {
+                const etherValue = parseFloat(ethers.utils.formatEther(transaction.token.data.quantity));
+                const tokensAllowed = etherValue / config.mintCost;
 
-            await connection.query('INSERT INTO mints SET project_id = ?, tx_hash = ?, wallet = ?, tokens_allowed = ?, tx_ether_value = ?',
-                [projectId, transaction.transaction_id, transaction.user, tokensAllowed, etherValue], (error, results, fields) => {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log(`Transfer from wallet ${transaction.user} for ${etherValue} has been imported. IMX Transaction has: ${transaction.transaction_id}`);
-                    }
-                });
-        });
+                await connection.query('INSERT INTO mints SET project_id = ?, tx_hash = ?, wallet = ?, tokens_allowed = ?, tx_ether_value = ?',
+                    [projectId, transaction.transaction_id, transaction.user, tokensAllowed, etherValue], (error, results, fields) => {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log(`Transfer from wallet ${transaction.user} for ${etherValue} has been imported. IMX Transaction has: ${transaction.transaction_id}`);
+                        }
+                    });
+            });
 
-        return res.status(200).json({result: true});
+            // cursor for next page
+            cursor = data.cursor;
+            remaining = data.remaining;
+        } // while we have new pages to fetch
 
-        // await sleep(60000);
-    // }
+        console.log('Waiting before poll ...');
+        await sleep(60000);
+    }
+
+    return res.status(200).json({result: true});
 }
 
