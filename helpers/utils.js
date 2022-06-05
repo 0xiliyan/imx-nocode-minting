@@ -1,7 +1,9 @@
 import fs from 'fs';
 import util from 'util';
-import mysql from "mysql";
 import config from "../config.js";
+import {AlchemyProvider} from "@ethersproject/providers";
+import {ImmutableXClient} from "@imtbl/imx-sdk";
+import {Wallet} from "@ethersproject/wallet";
 
 export const logConsoleOutputToFile = (logFile) => {
     var logFile = fs.createWriteStream(logFile, { flags: 'a' });
@@ -17,6 +19,33 @@ export const logConsoleOutputToFile = (logFile) => {
 
 export const sleep = (delay) => {
     return new Promise(resolve => setTimeout(resolve, delay));
+}
+
+export const getImxSDK = async () => {
+    const isRopsten = config.appNetwork == 'ropsten';
+
+    // set up provider
+    const provider = new AlchemyProvider(isRopsten ? 'ropsten' : 'homestead', isRopsten ? config.alchemyRopstenApiKey : config.alchemyApiKey);
+
+    // creating a signer
+    const wallet = new Wallet(config.minterPrivateKey);
+    const signer = wallet.connect(provider);
+
+    // set up IMX SDK client
+    const client = await ImmutableXClient.build({
+        // IMX's API URL
+        publicApiUrl: isRopsten ? config.publicApiUrlRopsten : config.publicApiUrl,
+        // signer (in this case, whoever owns the contract)
+        signer,
+        // IMX's STARK contract address
+        starkContractAddress: isRopsten ? config.imxRegistrationContractAddressRopsten : config.imxRegistrationContractAddress,
+        // IMX's Registration contract address
+        registrationContractAddress: isRopsten ? config.imxContractAddressRopsten : config.imxContractAddress
+    });
+
+    return {
+        provider, wallet, signer, client
+    }
 }
 
 export const getHash = (str) => {

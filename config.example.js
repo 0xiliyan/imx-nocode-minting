@@ -35,7 +35,6 @@ export default {
     infuraApiUrlRopsten: 'https://ropsten.infura.io/v3/your_api_key',
     // Address of your registered contract on Immutable X
     tokenContractAddress: 'your_contract_address_mainnet',
-    tokenContractAddressRopsten: 'your_contract_address_ropsten',
     royaltyReceiverAddress: 'your_royalty_receiver_address',
     royaltyPercentage: 2,
     // collecttion and frontend configuration

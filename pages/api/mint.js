@@ -4,6 +4,7 @@ import config from "../../config";
 import { ImmutableXClient, MintableERC721TokenType } from '@imtbl/imx-sdk';
 import { AlchemyProvider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
+import {getImxSDK} from "../../helpers/utils";
 
 export default function handler(req, res) {
     if (req.method === 'POST') {
@@ -13,10 +14,7 @@ export default function handler(req, res) {
 
 const mint = async (req, res) => {
     const collectionId = req.query.collection_id;
-    const isRopsten = config.appNetwork == 'ropsten';
-
-    // setting up the provider
-    const provider = new AlchemyProvider(isRopsten ? 'ropsten' : 'homestead', isRopsten ? config.alchemyRopstenApiKey : config.alchemyApiKey);
+    const {provider, client} = getImxSDK();
 
     // this function blocks until the transaction is either mined or rejected
     const waitForTransaction = async (promise) => {
@@ -88,22 +86,6 @@ const mint = async (req, res) => {
 
 
     const main = async () => {
-        // creating a signer from the provided private key
-        const signer = new Wallet(config.minterPrivateKey).connect(provider);
-
-        // initializing IMX-SDK client
-        const client = await ImmutableXClient.build({
-            // IMX's API URL
-            publicApiUrl: isRopsten ? config.publicApiUrlRopsten : config.publicApiUrl,
-            // signer (in this case, whoever owns the contract)
-            signer,
-            // IMX's STARK contract address
-            starkContractAddress: isRopsten ? config.imxRegistrationContractAddressRopsten : config.imxRegistrationContractAddress,
-            // IMX's Registration contract address
-            registrationContractAddress: isRopsten ? config.imxContractAddressRopsten : config.imxContractAddress
-        });
-
-
         // Registering the user (owner of the contract) with IMX
         const registerImxResult = await client.registerImx({
             // address derived from PK
