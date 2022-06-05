@@ -18,7 +18,7 @@ export default function handler(req, res) {
  * @returns {Promise<void>}
  */
 const importAirdrop = async (req, res) => {
-    const projectId = req.query.project_id;
+    const projectId = req.query.collection_id;
     const airdrops = await readCsv(path.resolve('storage/airdrop.csv'));
 
     airdrops.forEach(airdrop => {

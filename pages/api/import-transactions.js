@@ -35,7 +35,7 @@ const importTransactions = async (req, res) => {
                         const tokensAllowed = etherValue / config.mintCost;
 
                         await connection.query('INSERT INTO mints SET project_id = ?, tx_hash = ?, wallet = ?, tokens_allowed = ?, block_number = ?, tx_ether_value = ?',
-                            [req.query.project_id, tx.hash, tx.from, tokensAllowed, tx.blockNumber, etherValue], (error, results, fields) => {
+                            [req.query.collection_id, tx.hash, tx.from, tokensAllowed, tx.blockNumber, etherValue], (error, results, fields) => {
                                 if (error) {
                                     console.log(error);
                                 } else {

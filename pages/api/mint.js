@@ -12,7 +12,7 @@ export default function handler(req, res) {
 }
 
 const mint = async (req, res) => {
-    const projectId = req.query.project_id;
+    const collectionId = req.query.collection_id;
     const isRopsten = config.appNetwork == 'ropsten';
 
     // setting up the provider
@@ -32,8 +32,8 @@ const mint = async (req, res) => {
 
     const getTokensToMint = () => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM mints WHERE project_id = ? AND (tokens_allowed - tokens_minted) > 0 ORDER BY id ASC',
-                [projectId], (error, results, fields) => {
+            connection.query('SELECT * FROM mints WHERE collection_id = ? AND (tokens_allowed - tokens_minted) > 0 ORDER BY id ASC',
+                [collectionId], (error, results, fields) => {
                     if (error) {
                         reject();
                         console.log(error);
@@ -46,8 +46,8 @@ const mint = async (req, res) => {
 
     const getLastMintedTokenId = () => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT last_token_id FROM token_trackers WHERE project_id = ?',
-                [projectId], (error, results, fields) => {
+            connection.query('SELECT last_token_id FROM token_trackers WHERE collection_id = ?',
+                [collectionId], (error, results, fields) => {
                     if (error) {
                         reject();
                         console.log(error);
@@ -60,8 +60,8 @@ const mint = async (req, res) => {
 
     const updateLastMintedTokenId = (newTokenId) => {
         return new Promise((resolve, reject) => {
-            connection.query('UPDATE token_trackers SET last_token_id = ? WHERE project_id = ?',
-                [newTokenId, projectId], (error, results, fields) => {
+            connection.query('UPDATE token_trackers SET last_token_id = ? WHERE collection_id = ?',
+                [newTokenId, collectionId], (error, results, fields) => {
                     if (error) {
                         reject();
                         console.log(error);

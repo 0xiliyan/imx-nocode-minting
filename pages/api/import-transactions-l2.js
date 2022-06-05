@@ -18,7 +18,7 @@ export default function handler(req, res) {
  * @returns {Promise<void>}
  */
 const importTransactionsL2 = async (req, res) => {
-    const projectId = req.query.project_id;
+    const projectId = req.query.collection_id;
     let cursor = '';
     let remaining = 1;
 

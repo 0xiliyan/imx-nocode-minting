@@ -16,7 +16,7 @@ const storeProject = async (req, res) => {
 }
 
 const getProjects = async (req, res) => {
-    const result = await connection.query("SELECT * FROM projects LEFT JOIN token_trackers ON token_trackers.project_id = projects.id");
+    const result = await connection.query("SELECT * FROM projects");
     return res.status(200).json(result);
 }
 

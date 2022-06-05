@@ -13,7 +13,7 @@ export default function handler(req, res) {
 }
 
 const getProject = async (req, res) => {
-    const result = await connection.query("SELECT * FROM projects LEFT JOIN token_trackers ON token_trackers.project_id = projects.id WHERE projects.id = ?",
+    const result = await connection.query("SELECT * FROM projects WHERE id = ?",
         [req.query.id]
     );
     return res.status(200).json(result);
@@ -25,7 +25,7 @@ const updateProject = async (req, res) => {
     return res.status(200).json(result);
 }
 
-const deleteProject = async (req, res) => {
+const updateProject = async (req, res) => {
     const result = await connection.query("DELETE FROM projects WHERE id = ?", [req.query.id]);
     return res.status(204).json(result);
 }
