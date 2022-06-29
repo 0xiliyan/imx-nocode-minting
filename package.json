@@ -9,18 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.2.1",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
     "@imtbl/imx-sdk": "^1.20.1",
     "@openzeppelin/contracts": "^4.6.0",
     "@truffle/hdwallet-provider": "^2.0.8",
     "axios": "^0.27.2",
     "ethers": "^5.6.8",
     "fast-csv": "^4.3.6",
+    "framer-motion": "^6.3.16",
     "mysql": "^2.18.1",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "serverless-mysql": "^1.5.4",
     "solc": "^0.8.13",
+    "styled-components": "^5.3.5",
     "web3": "^1.7.3"
   },
   "devDependencies": {

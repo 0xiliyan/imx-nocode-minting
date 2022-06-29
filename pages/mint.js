@@ -8,12 +8,12 @@ import { ChakraProvider, Heading } from '@chakra-ui/react'
 import {Container} from "@chakra-ui/layout";
 import {Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/tabs";
 
-const Home = () => {
+const Mint = () => {
     return (
         <>
-            Configuration
+            Minting
         </>
     )
 }
 
-export default Home;
+export default Mint;

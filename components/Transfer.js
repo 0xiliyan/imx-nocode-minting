@@ -1,7 +1,8 @@
 import { Link, ETHTokenType } from '@imtbl/imx-sdk'
 import React, { useState, useEffect } from 'react'
-import config from "../../config";
-import {useLinkSDK} from "../hooks/useLinkSDK";
+import config from "../config";
+import {useLinkSDK} from "../pages/hooks/useLinkSDK";
+import { Button, Input } from '@chakra-ui/react'
 
 const Transfer = () => {
     const linkSDK = useLinkSDK();
@@ -21,12 +22,12 @@ const Transfer = () => {
     return (
         <div>
             <div>
-                <input type="text" value={amount} onChange={e => setAmount(e.target.value)} placeholder="ETH amount, e.g. 0.4" />
+                <Input type="text" value={amount} onChange={e => setAmount(e.target.value)} placeholder="ETH amount, e.g. 0.4" my={4} />
             </div>
             <div>
-                <input type="text" value={receiver} onChange={e => setReceiver(e.target.value)} placeholder="Receiver Wallet Address" />
+                <Input type="text" value={receiver} onChange={e => setReceiver(e.target.value)} placeholder="Receiver Wallet Address" my={4} />
             </div>
-            <button onClick={transfer}>Transfer</button>
+            <Button colorScheme='blue' onClick={transfer}>Transfer</Button>
         </div>
     )
 }
