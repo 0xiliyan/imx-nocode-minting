@@ -6,8 +6,8 @@ export default {
     dbUser: '',
     dbPass: '',
     // Alcehmy API key
-    alchemyApiKey: 'https://eth-mainnet.alchemyapi.io/v2/your_api_key',
-    alchemyApiKeyRopsten: 'https://eth-ropsten.alchemyapi.io/v2/your_api_key',
+    alchemyApiKey: '', // e.g. https://eth-mainnet.alchemyapi.io/v2/your_api_key
+    alchemyApiKeyRopsten: '', // e.g. https://eth-ropsten.alchemyapi.io/v2/your_api_key
     // Immutable X Generic Configurations
     // to submit a new contract for registration on immutable x use: https://submitcontract.x.immutable.com/
     linkSDK: 'https://link.x.immutable.com',
@@ -23,13 +23,13 @@ export default {
     imxContractAddress: '0x72a06bf2a1CE5e39cBA06c0CAb824960B587d64c',
     imxContractAddressRopsten: '0x6C21EC8DE44AE44D0992ec3e2d9f1aBb6207D864',
     // etherscan api
-    etherscanApiKey: 'yourapikey',
+    etherscanApiKey: '',
     etherscanApi: 'https://api.etherscan.io/api',
     etherscanApiRopsten: 'https://api-ropsten.etherscan.io/api',
     // used by import_transactions script
-    mintDepositAddress: 'your_deposit_address',
-    // Private key for the wallet that is the contract's owner
+    mintDepositAddress: '',
     minterAddress: 'your_contract_owner_wallet_addess',
+    // Private key for the wallet that is the contract's owner
     minterPrivateKey: 'your_contract_owner_wallet_private_key_mainnet',
     infuraApiUrl: 'https://mainnet.infura.io/v3/your_api_key',
     infuraApiUrlRopsten: 'https://ropsten.infura.io/v3/your_api_key',

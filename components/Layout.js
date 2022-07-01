@@ -16,7 +16,8 @@ const LinkItem = styled.div`
 `
 
 const Content = styled.div`
-    margin-top: 15px;
+    margin: 25px 0px;
+    padding-bottom: 100px;
 `
 
 const Layout = ({children}) => {
@@ -30,7 +31,6 @@ const Layout = ({children}) => {
                             <Button variant='outline'>Configuration</Button>
                         </Link>
                     </LinkItem>
-
                     <LinkItem>
                         <Link href="/mint">
                             <Button variant='outline'>Mint NFTs</Button>
