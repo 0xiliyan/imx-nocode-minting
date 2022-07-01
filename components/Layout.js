@@ -30,6 +30,7 @@ const Layout = ({children}) => {
                             <Button variant='outline'>Configuration</Button>
                         </Link>
                     </LinkItem>
+
                     <LinkItem>
                         <Link href="/mint">
                             <Button variant='outline'>Mint NFTs</Button>
