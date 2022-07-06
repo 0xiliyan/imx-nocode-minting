@@ -5,6 +5,7 @@ import Link from "next/link";
 import styled, { css } from 'styled-components';
 import {Tab, TabList, Tabs} from "@chakra-ui/tabs";
 import config from "../config";
+import {Img} from "@chakra-ui/image";
 
 const Header = styled.div`
     display: flex;
@@ -26,7 +27,7 @@ const Layout = ({children}) => {
     return (
         <ChakraProvider>
             <Container maxW="1250px">
-                <Heading size={'md'} mt={4}>IMX Nocode Minting</Heading>
+                <Img src="/img/imx-nocode-minter.png" mt={10}/>
                 <Header>
                     <LinkItem>
                         <Link href="/">
