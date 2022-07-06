@@ -59,3 +59,7 @@ export const getHash = (str) => {
     return hash;
 }
 
+export const updateConfig = (newConfig) => {
+    const newConfigObject = "export default " + util.inspect(newConfig, {showHidden: false, compact: false, depth: null});
+    fs.writeFileSync('./config.js', newConfigObject, 'utf-8');
+}

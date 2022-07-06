@@ -1,3 +1,4 @@
+// it is not recommended to edit this configuration directly, use the provided UI instead
 export default {
     appNetwork: 'mainnet',
     // database
@@ -28,14 +29,17 @@ export default {
     etherscanApiRopsten: 'https://api-ropsten.etherscan.io/api',
     // used by import_transactions script
     mintDepositAddress: '',
-    minterAddress: 'your_contract_owner_wallet_addess',
+    // your contract owner wallet address
+    minterAddress: '',
     // Private key for the wallet that is the contract's owner
-    minterPrivateKey: 'your_contract_owner_wallet_private_key_mainnet',
+    minterPrivateKey: '',
     infuraApiUrl: 'https://mainnet.infura.io/v3/your_api_key',
     infuraApiUrlRopsten: 'https://ropsten.infura.io/v3/your_api_key',
     // Address of your registered contract on Immutable X
-    tokenContractAddress: 'your_contract_address_mainnet',
-    royaltyReceiverAddress: 'your_royalty_receiver_address',
+    // Your contract address mainnet
+    tokenContractAddress: '',
+    // Royalty receiver address
+    royaltyReceiverAddress: '',
     royaltyPercentage: 2,
     // collecttion and frontend configuration
     collectionName: '', // e.g. "BoredApeYachtClub"
@@ -59,4 +63,6 @@ export default {
     currentPriceLabel: '',
     countdownDate: '',
     headerLinks: [],
+    // status
+    databaseImported: false,
 }

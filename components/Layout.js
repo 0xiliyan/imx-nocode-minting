@@ -4,6 +4,7 @@ import {Container} from "@chakra-ui/layout";
 import Link from "next/link";
 import styled, { css } from 'styled-components';
 import {Tab, TabList, Tabs} from "@chakra-ui/tabs";
+import config from "../config";
 
 const Header = styled.div`
     display: flex;
@@ -21,6 +22,7 @@ const Content = styled.div`
 `
 
 const Layout = ({children}) => {
+
     return (
         <ChakraProvider>
             <Container maxW="1250px">
@@ -28,12 +30,26 @@ const Layout = ({children}) => {
                 <Header>
                     <LinkItem>
                         <Link href="/">
-                            <Button variant='outline'>Configuration</Button>
+                            <Button variant='outline'>General Config</Button>
                         </Link>
                     </LinkItem>
+                    {!config.databaseImported &&
+                        <LinkItem>
+                            <Link href="/import-db">
+                                <Button variant='outline'>Import Database</Button>
+                            </Link>
+                        </LinkItem>
+                    }
+                    {!config.tokenContractAddress &&
+                        <LinkItem>
+                            <Link href="/deploy-contract">
+                                <Button variant='outline'>Deploy Contract</Button>
+                            </Link>
+                        </LinkItem>
+                    }
                     <LinkItem>
-                        <Link href="/mint">
-                            <Button variant='outline'>Mint NFTs</Button>
+                        <Link href="/project-config">
+                            <Button variant='outline'>Project Config</Button>
                         </Link>
                     </LinkItem>
                     <LinkItem>
@@ -42,18 +58,8 @@ const Layout = ({children}) => {
                         </Link>
                     </LinkItem>
                     <LinkItem>
-                        <Link href="/deploy-contract">
-                            <Button variant='outline'>Deploy Contract</Button>
-                        </Link>
-                    </LinkItem>
-                    <LinkItem>
-                        <Link href="/import-db">
-                            <Button variant='outline'>Import Database</Button>
-                        </Link>
-                    </LinkItem>
-                    <LinkItem>
-                        <Link href="/manage-projects">
-                            <Button variant='outline'>Manage Projects</Button>
+                        <Link href="/mint">
+                            <Button variant='outline'>Mint NFTs</Button>
                         </Link>
                     </LinkItem>
                 </Header>

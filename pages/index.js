@@ -3,9 +3,12 @@ import { Heading, FormControl, FormLabel, Input, FormHelperText, Select, Radio, 
 import {Box, Stack, Container} from "@chakra-ui/layout";
 import config from "../config";
 import styled, { css } from 'styled-components';
+import axios from "axios";
+import {Alert, AlertIcon} from "@chakra-ui/alert";
 
 const Home = () => {
     const [currentConfig, setCurrentConfig] = useState(config);
+    const [configSaved, setConfigSaved] = useState(false);
 
     const updateConfig = (key, value) => {
         const newConfig = {...currentConfig};
@@ -13,9 +16,21 @@ const Home = () => {
         setCurrentConfig(newConfig);
     }
 
+    const saveConfig = async () => {
+        const response = await axios.post('/api/update-config', {config: currentConfig});
+
+        if (response.data.result) {
+            setConfigSaved(true);
+            setTimeout(() => {
+                setConfigSaved(false);
+            }, 2000);
+        }
+    }
+
     return (
         <>
-            <Heading as="h3" size="lg" mb={15}>Configuration</Heading>
+            <Heading as="h3" size="lg" mb={15}>General Config</Heading>
+            <Heading as="h4" size="xs" mb={15}>Set up the configuration below in order to start minting</Heading>
             <Box mt="15" width="500px">
                 <FormControl mb="5">
                     <FormLabel htmlFor='email'>ETH Network</FormLabel>
@@ -77,7 +92,13 @@ const Home = () => {
                     <Input placeholder="" onChange={(e) => updateConfig('minterPrivateKey', e.target.value)} value={currentConfig.minterPrivateKey} />
                     <FormHelperText>Private Key for Contract Owner Wallet. Used to deploy contract to Ethereum and also mint NFTs. You can export this from Metamask wallet</FormHelperText>
                 </FormControl>
-                <Button colorScheme="messenger">Save</Button>
+                {configSaved ?
+                    <Alert status='success' variant='subtle' mt={5}>
+                        <AlertIcon />
+                        Configuration Saved!
+                    </Alert> :
+                    <Button colorScheme="blue" onClick={saveConfig}>Save</Button>
+                }
             </Box>
         </>
     )

@@ -1,9 +1,9 @@
 export default {
     sql: `
-        DROP TABLE IF EXISTS \`token_trackers\`;
         DROP TABLE IF EXISTS \`mints\`;
-        DROP TABLE IF EXISTS \`projects\`;
+        DROP TABLE IF EXISTS \`token_trackers\`;
         DROP TABLE IF EXISTS \`collections\`;
+        DROP TABLE IF EXISTS \`projects\`;
 
         CREATE TABLE \`projects\`
         (

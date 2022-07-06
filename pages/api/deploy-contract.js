@@ -1,7 +1,8 @@
 import config from "../../config";
+import {updateConfig} from "../../helpers/utils";
 
 export default function handler(req, res) {
-    if (req.method === 'GET') {
+    if (req.method === 'POST') {
         return deployContract(req, res);
     }
 }
@@ -70,6 +71,11 @@ const deployContract = async (req, res) => {
 
             console.log(`Deployed contract with address: ${_address}`);
 
+            // update deployed contract address
+            const newConfig = {...config};
+            newConfig.tokenContractAddress = _address;
+            updateConfig(newConfig);
+
             return _address;
         } catch (err) {
             console.log(err);
@@ -78,5 +84,5 @@ const deployContract = async (req, res) => {
 
     const newContractAddress = await deploy();
 
-    return res.status(200).json({newContractAddress});
+    return res.status(200).json({result: newContractAddress});
 }
