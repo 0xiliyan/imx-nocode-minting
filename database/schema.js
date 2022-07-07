@@ -23,6 +23,9 @@ export default {
             \`icon_url\` varchar(255),
             \`metadata_api_url\` varchar(255) NOT NULL,
             \`collection_image_url\` varchar(255) NOT NULL,
+            \`collection_size\` int NOT NULL,
+            \`mint_cost\` decimal(5, 2) NOT NULL,
+            \`max_mints_per_user\` int DEFAULT '0',
             PRIMARY KEY (\`id\`),
             KEY \`collections_FK\` (\`project_id\`),
             CONSTRAINT \`collections_FK\` FOREIGN KEY (\`project_id\`) REFERENCES \`projects\` (\`id\`) ON DELETE CASCADE ON UPDATE CASCADE

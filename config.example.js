@@ -41,12 +41,13 @@ export default {
     // Royalty receiver address
     royaltyReceiverAddress: '',
     royaltyPercentage: 2,
-    // collecttion and frontend configuration
+    // collection configuration
     collectionName: '', // e.g. "BoredApeYachtClub"
     collectionSymbol: '', // e.g. "BAYC"
     collectionCount: 10000,
     mintCost: '',
     maxMintsForUser: 0, // zero means unlimited
+    // frontend configuration
     whitelistedAddresses: [],
     mintBatchSize: 100,
     endSaleAtDepositAmount: 0,
@@ -63,7 +64,7 @@ export default {
     currentPriceLabel: '',
     countdownDate: '',
     headerLinks: [],
-    // status
+    // general statuses
     generalConfigUpdated: false,
     databaseImported: false,
 }
