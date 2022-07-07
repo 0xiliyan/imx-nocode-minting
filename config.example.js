@@ -64,5 +64,6 @@ export default {
     countdownDate: '',
     headerLinks: [],
     // status
+    generalConfigUpdated: false,
     databaseImported: false,
 }

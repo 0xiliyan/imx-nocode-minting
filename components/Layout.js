@@ -34,35 +34,37 @@ const Layout = ({children}) => {
                             <Button variant='outline'>General Config</Button>
                         </Link>
                     </LinkItem>
-                    {!config.databaseImported &&
-                        <LinkItem>
-                            <Link href="/import-db">
-                                <Button variant='outline'>Import Database</Button>
-                            </Link>
-                        </LinkItem>
+                    {config.generalConfigUpdated &&
+                        <>
+                            {!config.databaseImported &&
+                            <LinkItem>
+                                <Link href="/import-db">
+                                    <Button variant='outline'>Import Database</Button>
+                                </Link>
+                            </LinkItem>
+                            }
+                            <LinkItem>
+                                <Link href="/deploy-contract">
+                                    <Button variant='outline'>Deploy Contract</Button>
+                                </Link>
+                            </LinkItem>
+                            <LinkItem>
+                                <Link href="/project-config">
+                                    <Button variant='outline'>Project Config</Button>
+                                </Link>
+                            </LinkItem>
+                            <LinkItem>
+                                <Link href="/whitelist">
+                                    <Button variant='outline'>Import Whitelist</Button>
+                                </Link>
+                            </LinkItem>
+                            <LinkItem>
+                                <Link href="/mint">
+                                    <Button variant='outline'>Mint NFTs</Button>
+                                </Link>
+                            </LinkItem>
+                        </>
                     }
-                    {!config.tokenContractAddress &&
-                        <LinkItem>
-                            <Link href="/deploy-contract">
-                                <Button variant='outline'>Deploy Contract</Button>
-                            </Link>
-                        </LinkItem>
-                    }
-                    <LinkItem>
-                        <Link href="/project-config">
-                            <Button variant='outline'>Project Config</Button>
-                        </Link>
-                    </LinkItem>
-                    <LinkItem>
-                        <Link href="/whitelist">
-                            <Button variant='outline'>Import Whitelist</Button>
-                        </Link>
-                    </LinkItem>
-                    <LinkItem>
-                        <Link href="/mint">
-                            <Button variant='outline'>Mint NFTs</Button>
-                        </Link>
-                    </LinkItem>
                 </Header>
                 <Content>
                     {children}
