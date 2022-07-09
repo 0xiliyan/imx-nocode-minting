@@ -14,7 +14,7 @@ export default function handler(req, res) {
 
 const mint = async (req, res) => {
     const collectionId = req.query.collection_id;
-    const {provider, client} = getImxSDK();
+    const {provider, client} = await getImxSDK();
 
     // this function blocks until the transaction is either mined or rejected
     const waitForTransaction = async (promise) => {

@@ -11,10 +11,11 @@ export default function handler(req, res) {
 }
 
 const storeProject = async (req, res) => {
-    const {provider, client} = getImxSDK();
+    const {provider, client} = await getImxSDK();
 
     let project;
     try {
+        // create project at IMX
         project = await client.createProject({
             name: req.body.name,
             company_name: req.body.company_name,
@@ -22,10 +23,11 @@ const storeProject = async (req, res) => {
         });
 
         // persist to database
-        const result = await connection.query("INSERT INTO projects(name) VALUES(?)", [req.body.name]);
+        const result = await connection.query("INSERT INTO projects(imx_project_id, name, company_name, contact_email) VALUES(?,?,?,?)", [project.id, req.body.name, req.body.company_name, req.body.contact_email]);
 
-        return res.status(200).json(result);
+        return res.status(200).json({project_id: result.insertId});
     } catch (error) {
+        console.log(error);
         res.status(500).json({error: JSON.stringify(error, null, 2)});
     }
 }

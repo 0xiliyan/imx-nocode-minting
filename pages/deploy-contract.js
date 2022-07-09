@@ -56,12 +56,12 @@ const DeployContract = () => {
             }
 
             <Box mt="15" width="500px">
-                <FormControl mb="5">
+                <FormControl mb="5" isRequired>
                     <FormLabel htmlFor='email'>Contract Owner Wallet Address</FormLabel>
                     <Input placeholder="" onChange={(e) => updateConfig('minterAddress', e.target.value)} value={currentConfig.minterAddress} isInvalid={formHasErrors && !currentConfig.minterAddress} />
                     <FormHelperText>Wallet address that will be used to deploy the ImmutableX contract</FormHelperText>
                 </FormControl>
-                <FormControl mb="5">
+                <FormControl mb="5" isRequired>
                     <FormLabel htmlFor='email'>Contract Owner Wallet Private Key</FormLabel>
                     <Input placeholder="" onChange={(e) => updateConfig('minterPrivateKey', e.target.value)} value={currentConfig.minterPrivateKey} isInvalid={formHasErrors && !currentConfig.minterPrivateKey} />
                     <FormHelperText>Private Key for Contract Owner Wallet. Used to deploy contract to Ethereum and also mint NFTs. You can export this from Metamask wallet</FormHelperText>

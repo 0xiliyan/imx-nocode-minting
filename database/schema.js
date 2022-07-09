@@ -8,6 +8,7 @@ export default {
         CREATE TABLE \`projects\`
         (
             \`id\`   bigint       NOT NULL AUTO_INCREMENT,
+            \`imx_project_id\`   bigint       NOT NULL,
             \`name\` varchar(255) NOT NULL,
             \`company_name\` varchar(255),
             \`contact_email\` varchar(255),
@@ -17,6 +18,7 @@ export default {
         CREATE TABLE \`collections\`
         (
             \`id\`   bigint       NOT NULL AUTO_INCREMENT,
+            \`imx_collection_id\`   bigint       NOT NULL,
             \`project_id\` bigint NOT NULL,
             \`name\` varchar(255) NOT NULL,
             \`description\` TEXT,

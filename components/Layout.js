@@ -49,8 +49,8 @@ const Layout = ({children}) => {
                                 </Link>
                             </LinkItem>
                             <LinkItem>
-                                <Link href="/project-config">
-                                    <Button variant='outline'>Project Config</Button>
+                                <Link href="/nft-collections">
+                                    <Button variant='outline'>NFT Collections</Button>
                                 </Link>
                             </LinkItem>
                             <LinkItem>

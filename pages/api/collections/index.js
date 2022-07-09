@@ -12,7 +12,7 @@ export default function handler(req, res) {
 }
 
 const storeCollection = async (req, res) => {
-    const {wallet, client} = getImxSDK();
+    const {wallet, client} = await getImxSDK();
 
     let collection;
     try {
@@ -28,9 +28,10 @@ const storeCollection = async (req, res) => {
         });
 
         // persist to database
-        const result = await connection.query("INSERT INTO collections(name) VALUES(?)", [req.body.name]);
+        const result = await connection.query("INSERT INTO collections(imx_collection_id, name, project_id, description, icon_url, metadata_api_url, collection_image_url) VALUES(?,?,?,?,?,?,?)",
+            [collection.id, req.body.name, req.body.project_id, req.body.description, req.body.icon_url, req.body.metadata_api_url, req.body.collection_image_url]);
 
-        return res.status(200).json(result);
+        return res.status(200).json({collection_id: result.insertId});
     } catch (error) {
         res.status(500).json({error: JSON.stringify(error, null, 2)});
     }
