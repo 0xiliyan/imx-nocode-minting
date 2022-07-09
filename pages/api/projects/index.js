@@ -25,7 +25,10 @@ const storeProject = async (req, res) => {
         // persist to database
         const result = await connection.query("INSERT INTO projects(imx_project_id, name, company_name, contact_email) VALUES(?,?,?,?)", [project.id, req.body.name, req.body.company_name, req.body.contact_email]);
 
-        return res.status(200).json({project_id: result.insertId});
+        return res.status(200).json({
+            project_id: result.insertId,
+            imx_project_id: project.id,
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({error: JSON.stringify(error, null, 2)});

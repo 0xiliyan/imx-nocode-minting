@@ -26,12 +26,12 @@ const NFTCollections = () => {
             });
 
             // create the collection
-            const project_id = response.data.project_id;
+            const project_id = response.data.imx_project_id;
 
             response = await axios.post('/api/collections', {
                 name: collection.collection_name,
                 project_id: project_id,
-                description: collection.description,
+                description: collection.collection_description,
                 icon_url: collection.icon_url,
                 metadata_api_url: collection.metadata_api_url,
                 collection_size: collection.collection_size,
@@ -51,7 +51,8 @@ const NFTCollections = () => {
     }
 
     const checkIsFormValid = () => {
-        return (collection.project_name) ? true : false;
+        return (collection.project_name && collection.collection_name && collection.collection_description && collection.icon_url &&
+            collection.metadata_api_url && collection.collection_image_url && collection.collection_size && collection.mint_cost) ? true : false;
     }
 
     console.log(collection);
@@ -103,7 +104,7 @@ const NFTCollections = () => {
                 </FormControl>
                 <FormControl mb="5">
                     <FormLabel htmlFor='email'>Max Mints Per User (Leave blank for unlimited)</FormLabel>
-                    <Input placeholder="" onChange={(e) => setCollection(prevState => ({...prevState, max_mints_per_user: e.target.value}))} value={collection.max_mints_per_user} isInvalid={formHasErrors && !collection.max_mints_per_user} />
+                    <Input placeholder="" onChange={(e) => setCollection(prevState => ({...prevState, max_mints_per_user: e.target.value}))} value={collection.max_mints_per_user} />
                 </FormControl>
                 <Button colorScheme="blue" onClick={saveCollection}>
                     Create Collection
