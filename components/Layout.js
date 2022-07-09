@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {Button, ChakraProvider, Heading, Input} from '@chakra-ui/react'
-import {Container} from "@chakra-ui/layout";
+import {Box, Container, Flex} from "@chakra-ui/layout";
 import Link from "next/link";
 import styled, { css } from 'styled-components';
 import {Tab, TabList, Tabs} from "@chakra-ui/tabs";
@@ -27,7 +27,10 @@ const Layout = ({children}) => {
     return (
         <ChakraProvider>
             <Container maxW="1250px">
-                <Img src="/img/imx-nocode-minter.png" mt={10}/>
+                <Flex align="center" mt={10}>
+                    <Img src="/img/imx-nocode-minter.png" />
+                    <Box ml="4" color="green">{config.appNetwork}</Box>
+                </Flex>
                 <Header>
                     <LinkItem>
                         <Link href="/">
