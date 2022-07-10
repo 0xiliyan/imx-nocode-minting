@@ -36,7 +36,7 @@ const storeProject = async (req, res) => {
 }
 
 const getProjects = async (req, res) => {
-    const result = await connection.query("SELECT * FROM projects");
+    const result = await connection.query(`SELECT * FROM projects ORDER BY name ASC`);
     return res.status(200).json(result);
 }
 

@@ -29,7 +29,7 @@ const Layout = ({children}) => {
             <Container maxW="1250px">
                 <Flex align="center" mt={10}>
                     <Img src="/img/imx-nocode-minter.png" />
-                    <Box ml="4" color="green">{config.appNetwork}</Box>
+                    <Box ml="4" color="green">{config.appNetwork.charAt(0).toUpperCase() + config.appNetwork.slice(1)}</Box>
                 </Flex>
                 <Header>
                     <LinkItem>
@@ -52,20 +52,20 @@ const Layout = ({children}) => {
                                 </Link>
                             </LinkItem>
                             <LinkItem>
-                                <Link href="/nft-collections">
+                                <Link href="/collections">
                                     <Button variant='outline'>NFT Collections</Button>
                                 </Link>
                             </LinkItem>
-                            <LinkItem>
-                                <Link href="/whitelist">
-                                    <Button variant='outline'>Import Whitelist</Button>
-                                </Link>
-                            </LinkItem>
-                            <LinkItem>
-                                <Link href="/mint">
-                                    <Button variant='outline'>Mint NFTs</Button>
-                                </Link>
-                            </LinkItem>
+                            {/*<LinkItem>*/}
+                            {/*    <Link href="/whitelist">*/}
+                            {/*        <Button variant='outline'>Import Whitelist</Button>*/}
+                            {/*    </Link>*/}
+                            {/*</LinkItem>*/}
+                            {/*<LinkItem>*/}
+                            {/*    <Link href="/mint">*/}
+                            {/*        <Button variant='outline'>Mint NFTs</Button>*/}
+                            {/*    </Link>*/}
+                            {/*</LinkItem>*/}
                         </>
                     }
                 </Header>

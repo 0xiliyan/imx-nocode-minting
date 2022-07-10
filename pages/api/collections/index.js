@@ -18,7 +18,7 @@ const storeCollection = async (req, res) => {
     try {
         collection = await client.createCollection({
             name: req.body.name,
-            project_id: req.body.project_id,
+            project_id: req.body.imx_project_id,
             description: req.body.description,
             icon_url: req.body.icon_url,
             metadata_api_url: req.body.metadata_api_url,
@@ -28,19 +28,25 @@ const storeCollection = async (req, res) => {
         });
 
         // persist to database
-        const result = await connection.query("INSERT INTO collections(imx_collection_id, name, project_id, description, icon_url, metadata_api_url, collection_image_url) VALUES(?,?,?,?,?,?,?)",
-            [collection.id, req.body.name, req.body.project_id, req.body.description, req.body.icon_url, req.body.metadata_api_url, req.body.collection_image_url]);
+        const result = await connection.query("INSERT INTO collections(imx_collection_id, name, project_id, description, icon_url, metadata_api_url, collection_image_url, collection_size, mint_cost, max_mints_per_user) VALUES(?,?,?,?,?,?,?,?,?,?)",
+            [collection.address, req.body.name, req.body.project_id, req.body.description, req.body.icon_url, req.body.metadata_api_url, req.body.collection_image_url, req.body.collection_size, req.body.mint_cost, req.body.max_mints_per_user]);
 
         return res.status(200).json({collection_id: result.insertId});
     } catch (error) {
-        res.status(500).json({error: JSON.stringify(error, null, 2)});
+        res.status(200).json({error});
     }
 
     return res.status(200).json(result);
 }
 
 const getCollections = async (req, res) => {
-    const result = await connection.query("SELECT * FROM collections LEFT JOIN token_trackers ON token_trackers.collection_id = collections.id");
+    const result = await connection.query(`
+        SELECT collections.*, projects.name as project_name, projects.imx_project_id, projects.company_name, projects.contact_email, token_trackers.last_token_id 
+        FROM collections JOIN projects on collections.project_id = projects.id 
+        LEFT JOIN token_trackers ON collections.id = token_trackers.collection_id 
+        ORDER BY collections.name ASC
+    `);
+
     return res.status(200).json(result);
 }
 

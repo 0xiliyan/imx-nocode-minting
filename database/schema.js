@@ -18,7 +18,7 @@ export default {
         CREATE TABLE \`collections\`
         (
             \`id\`   bigint       NOT NULL AUTO_INCREMENT,
-            \`imx_collection_id\`   bigint       NOT NULL,
+            \`imx_collection_id\`   varchar(255)       NOT NULL,
             \`project_id\` bigint NOT NULL,
             \`name\` varchar(255) NOT NULL,
             \`description\` TEXT,
