@@ -55,8 +55,8 @@ const Collections = () => {
                                     <Link href="/collections/create">
                                         <Button colorScheme="blue" variant="outline" mr={5}>Mint</Button>
                                     </Link>
-                                    <Link href="/collections/create">
-                                        <Button colorScheme="blue" variant="outline" mr={5}>Whitelist</Button>
+                                    <Link href={`/collections/${collection.id}/airdrop`}>
+                                        <Button colorScheme="blue" variant="outline" mr={5}>Airdrop</Button>
                                     </Link>
                                     <Link href={`/collections/${collection.id}/update`}>
                                         <Button colorScheme="blue" variant="outline" mr={5}>Edit</Button>
