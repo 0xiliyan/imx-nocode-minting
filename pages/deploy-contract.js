@@ -7,6 +7,7 @@ import axios from "axios";
 import {Alert, AlertIcon} from "@chakra-ui/alert";
 import {CircularProgress} from "@chakra-ui/progress";
 import {Spinner} from "@chakra-ui/spinner";
+import {Section} from "../components/Layout";
 
 const DeployContract = () => {
     const [currentConfig, setCurrentConfig] = useState(config);
@@ -55,31 +56,33 @@ const DeployContract = () => {
             </Alert>
             }
 
-            <Box mt="15" width="500px">
-                <FormControl mb="5" isRequired>
-                    <FormLabel htmlFor='email'>Contract Owner Wallet Address</FormLabel>
-                    <Input placeholder="" onChange={(e) => updateConfig('minterAddress', e.target.value)} value={currentConfig.minterAddress} isInvalid={formHasErrors && !currentConfig.minterAddress} />
-                    <FormHelperText>Wallet address that will be used to deploy the ImmutableX contract</FormHelperText>
-                </FormControl>
-                <FormControl mb="5" isRequired>
-                    <FormLabel htmlFor='email'>Contract Owner Wallet Private Key</FormLabel>
-                    <Input placeholder="" onChange={(e) => updateConfig('minterPrivateKey', e.target.value)} value={currentConfig.minterPrivateKey} isInvalid={formHasErrors && !currentConfig.minterPrivateKey} />
-                    <FormHelperText>Private Key for Contract Owner Wallet. Used to deploy contract to Ethereum and also mint NFTs. You can export this from Metamask wallet</FormHelperText>
-                </FormControl>
-                <>
-                    {!deployingContract ?
-                        <>
-                            <Button colorScheme="blue" onClick={deployContract}>
-                                Deploy Contract to Ethereum {config.appNetwork}
-                            </Button>
-                            {formHasErrors &&
-                            <Text fontSize="sm" color="red" mt="4">Form has errors, please check fields above</Text>
-                            }
-                        </>
-                        :
-                        <Flex size={"md"} align="center">Deploying, please wait... <Spinner ml={5}/></Flex>
-                    }
-                </>
+            <Box width="700px">
+                <Section>
+                    <FormControl mb="5" isRequired>
+                        <FormLabel htmlFor='email'>Contract Owner Wallet Address</FormLabel>
+                        <Input placeholder="" onChange={(e) => updateConfig('minterAddress', e.target.value)} value={currentConfig.minterAddress} isInvalid={formHasErrors && !currentConfig.minterAddress} />
+                        <FormHelperText>Wallet address that will be used to deploy the ImmutableX contract</FormHelperText>
+                    </FormControl>
+                    <FormControl mb="5" isRequired>
+                        <FormLabel htmlFor='email'>Contract Owner Wallet Private Key</FormLabel>
+                        <Input placeholder="" onChange={(e) => updateConfig('minterPrivateKey', e.target.value)} value={currentConfig.minterPrivateKey} isInvalid={formHasErrors && !currentConfig.minterPrivateKey} />
+                        <FormHelperText>Private Key for Contract Owner Wallet. Used to deploy contract to Ethereum and also mint NFTs. You can export this from Metamask wallet</FormHelperText>
+                    </FormControl>
+                    <>
+                        {!deployingContract ?
+                            <>
+                                <Button colorScheme="blue" onClick={deployContract}>
+                                    Deploy Contract to Ethereum {config.appNetwork}
+                                </Button>
+                                {formHasErrors &&
+                                <Text fontSize="sm" color="red" mt="4">Form has errors, please check fields above</Text>
+                                }
+                            </>
+                            :
+                            <Flex size={"md"} align="center">Deploying, please wait... <Spinner ml={5}/></Flex>
+                        }
+                    </>
+                </Section>
             </Box>
         </>
     )

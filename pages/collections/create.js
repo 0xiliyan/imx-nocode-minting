@@ -9,6 +9,7 @@ import {CircularProgress} from "@chakra-ui/progress";
 import {Spinner} from "@chakra-ui/spinner";
 import {NumberInput} from "@chakra-ui/number-input";
 import Router from "next/router";
+import {Section} from "../../components/Layout";
 
 const CreateCollection = () => {
     const [formHasErrors, setFormHasErrors] = useState(false);
@@ -89,7 +90,8 @@ const CreateCollection = () => {
     return (
         <>
             <Heading as="h3" size="lg" mb={15}>Create a new NFT collection</Heading>
-            <Box mt="15" width="500px">
+            <Box width="700px">
+                <Section>
                 <FormControl mb="5" isRequired>
                     <FormLabel htmlFor='email'>Select Project</FormLabel>
                     <Select onChange={(e) => setProject(e.target.value)} value={project}>
@@ -153,6 +155,7 @@ const CreateCollection = () => {
                 {formHasErrors &&
                     <Text fontSize="sm" color="red" mt="4">{formHasErrors}</Text>
                 }
+                </Section>
             </Box>
         </>
     )

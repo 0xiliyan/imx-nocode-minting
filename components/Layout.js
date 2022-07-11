@@ -9,7 +9,6 @@ import {Img} from "@chakra-ui/image";
 
 const Header = styled.div`
     display: flex;
-    margin-top: 25px;
 `
 
 const LinkItem = styled.div`
@@ -22,53 +21,72 @@ const Content = styled.div`
     padding-bottom: 100px;
 `
 
-const Layout = ({children}) => {
+export const Section = styled.div`
+    padding: 24px 30px;
+    background-color: #fff;
+    border: 1px solid #e8edf3;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 2px 4px 0 rgb(223 228 234 / 20%);
+    box-shadow: 0 2px 4px 0 rgb(223 228 234 / 20%);
+    margin: 15px 0px;
+`
 
+const AppNetwork = styled.div`
+    background: #10cbc5;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 20px;
+    margin: 0px 20px;
+    border-radius: 15px;
+`
+
+const Layout = ({children}) => {
     return (
         <ChakraProvider>
-            <Container maxW="1250px">
-                <Flex align="center" mt={10}>
-                    <Img src="/img/imx-nocode-minter.png" />
-                    <Box ml="4" color="green">{config.appNetwork.charAt(0).toUpperCase() + config.appNetwork.slice(1)}</Box>
-                </Flex>
+            <Flex align="center" background="white" p={5}>
+                <Img src="/img/imx-nocode-minter.png" />
+                <AppNetwork>{config.appNetwork.charAt(0).toUpperCase() + config.appNetwork.slice(1)}</AppNetwork>
                 <Header>
                     <LinkItem>
                         <Link href="/">
-                            <Button variant='outline'>General Config</Button>
+                            <Button variant="ghost" colorScheme="gray">General Config</Button>
                         </Link>
                     </LinkItem>
                     {config.generalConfigUpdated &&
-                        <>
-                            {!config.databaseImported &&
-                            <LinkItem>
-                                <Link href="/import-db">
-                                    <Button variant='outline'>Import Database</Button>
-                                </Link>
-                            </LinkItem>
-                            }
-                            <LinkItem>
-                                <Link href="/deploy-contract">
-                                    <Button variant='outline'>Deploy Contract</Button>
-                                </Link>
-                            </LinkItem>
-                            <LinkItem>
-                                <Link href="/collections">
-                                    <Button variant='outline'>NFT Collections</Button>
-                                </Link>
-                            </LinkItem>
-                            {/*<LinkItem>*/}
-                            {/*    <Link href="/whitelist">*/}
-                            {/*        <Button variant='outline'>Import Whitelist</Button>*/}
-                            {/*    </Link>*/}
-                            {/*</LinkItem>*/}
-                            {/*<LinkItem>*/}
-                            {/*    <Link href="/mint">*/}
-                            {/*        <Button variant='outline'>Mint NFTs</Button>*/}
-                            {/*    </Link>*/}
-                            {/*</LinkItem>*/}
-                        </>
+                    <>
+                        {!config.databaseImported &&
+                        <LinkItem>
+                            <Link href="/import-db">
+                                <Button variant="ghost" colorScheme="gray">Import Database</Button>
+                            </Link>
+                        </LinkItem>
+                        }
+                        <LinkItem>
+                            <Link href="/deploy-contract">
+                                <Button variant="ghost" colorScheme="gray">Deploy Contract</Button>
+                            </Link>
+                        </LinkItem>
+                        <LinkItem>
+                            <Link href="/collections">
+                                <Button variant="ghost" colorScheme="gray">NFT Collections</Button>
+                            </Link>
+                        </LinkItem>
+                        {/*<LinkItem>*/}
+                        {/*    <Link href="/whitelist">*/}
+                        {/*        <Button variant='outline'>Import Whitelist</Button>*/}
+                        {/*    </Link>*/}
+                        {/*</LinkItem>*/}
+                        {/*<LinkItem>*/}
+                        {/*    <Link href="/mint">*/}
+                        {/*        <Button variant='outline'>Mint NFTs</Button>*/}
+                        {/*    </Link>*/}
+                        {/*</LinkItem>*/}
+                    </>
                     }
                 </Header>
+            </Flex>
+            <Container maxW="1400px">
                 <Content>
                     {children}
                 </Content>

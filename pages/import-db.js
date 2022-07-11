@@ -5,6 +5,7 @@ import config from "../config";
 import styled, { css } from 'styled-components';
 import axios from "axios";
 import {Alert, AlertIcon} from "@chakra-ui/alert";
+import {Section} from "../components/Layout";
 
 const ImportDatabase = () => {
     const [currentConfig, setCurrentConfig] = useState(config);
@@ -28,14 +29,16 @@ const ImportDatabase = () => {
         <>
             <Heading as="h3" size="lg" mb={15}>Import Database</Heading>
             <Heading as="h4" size="xs" mb={15}>Create database tables to enable NFT minting and management</Heading>
-            <Box mt="15" width="500px">
-                {databaseImported ?
-                    <Alert status='success' variant='subtle' mt={5}>
-                        <AlertIcon />
-                        Database Imported!
-                    </Alert> :
-                    <Button colorScheme="blue" onClick={importDb}>Import</Button>
-                }
+            <Box width="700px">
+                <Section>
+                    {databaseImported ?
+                        <Alert status='success' variant='subtle' mt={5}>
+                            <AlertIcon />
+                            Database Imported!
+                        </Alert> :
+                        <Button colorScheme="blue" onClick={importDb}>Import</Button>
+                    }
+                </Section>
             </Box>
         </>
     )

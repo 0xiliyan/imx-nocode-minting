@@ -10,6 +10,7 @@ import {Spinner} from "@chakra-ui/spinner";
 import {NumberInput} from "@chakra-ui/number-input";
 import Link from "next/link";
 import {Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/table";
+import {Section} from "../../components/Layout";
 
 const Collections = () => {
     const [collections, setCollections] = useState([]);
@@ -26,7 +27,8 @@ const Collections = () => {
     return (
         <>
             <Heading as="h3" size="lg" mb={15}>NFT Collections</Heading>
-            <TableContainer>
+            <Section>
+                <TableContainer>
                 <Table variant='simple' size='sm'>
                     <TableCaption>Your Collections on ImmutableX</TableCaption>
                     <Thead>
@@ -65,7 +67,8 @@ const Collections = () => {
                     </Tbody>
                 </Table>
             </TableContainer>
-            <Box mt="15" width="500px">
+            </Section>
+            <Box mt="25" width="500px">
                 <Link href="/collections/create">
                     <Button colorScheme="blue">
                         Create Collection
