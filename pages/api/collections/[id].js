@@ -1,4 +1,6 @@
 import {connection} from "../../../helpers/db";
+import {getImxSDK} from "../../../helpers/utils";
+import config from "../../../config";
 
 export default function handler(req, res) {
     if (req.method === 'GET') {
@@ -13,14 +15,42 @@ export default function handler(req, res) {
 }
 
 const getCollection = async (req, res) => {
-    const result = await connection.query("SELECT * FROM collections LEFT JOIN token_trackers ON token_trackers.collection_id = collections.id WHERE collections.id = ?",
+    const result = await connection.query("SELECT collections.*, token_trackers.last_token_id FROM collections LEFT JOIN token_trackers ON token_trackers.collection_id = collections.id WHERE collections.id = ?",
         [req.query.id]
     );
-    return res.status(200).json(result);
+    return res.status(200).json(result[0]);
 }
 
 const updateCollection = async (req, res) => {
-    const result = await connection.query("UPDATE collections SET ? WHERE id = ?", [req.body, req.query.id]);
+    const {wallet, client} = await getImxSDK();
+
+    let collection;
+    try {
+        collection = await client.updateCollection(req.body.imx_collection_id,{
+            name: req.body.name,
+            description: req.body.description,
+            icon_url: req.body.icon_url,
+            metadata_api_url: req.body.metadata_api_url,
+            collection_image_url: req.body.collection_image_url,
+        });
+
+        // persist to database
+        const result = await connection.query("UPDATE collections SET ? WHERE id = ?",
+            [{
+                name: req.body.name,
+                description: req.body.description,
+                icon_url: req.body.icon_url,
+                metadata_api_url: req.body.metadata_api_url,
+                collection_image_url: req.body.collection_image_url,
+                collection_size: req.body.collection_size,
+                mint_cost: req.body.mint_cost,
+                max_mints_per_user: req.body.max_mints_per_user,
+            }, req.query.id]);
+
+        return res.status(200).json({collection_id: req.query.id});
+    } catch (error) {
+        res.status(200).json({error});
+    }
 
     return res.status(200).json(result);
 }

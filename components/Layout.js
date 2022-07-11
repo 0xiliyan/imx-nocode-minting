@@ -34,7 +34,7 @@ export const Section = styled.div`
 const AppNetwork = styled.div`
     background: #10cbc5;
     color: #fff;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     padding: 5px 20px;
     margin: 0px 20px;

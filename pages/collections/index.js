@@ -44,7 +44,7 @@ const Collections = () => {
                     </Thead>
                     <Tbody>
                         {collections.map(collection =>
-                            <Tr>
+                            <Tr key={collection.id}>
                                 <Td>{collection.name}</Td>
                                 <Td>{collection.imx_collection_id}</Td>
                                 <Td>{collection.project_name}</Td>
@@ -58,9 +58,9 @@ const Collections = () => {
                                     <Link href="/collections/create">
                                         <Button colorScheme="blue" variant="outline" mr={5}>Whitelist</Button>
                                     </Link>
-                                    {/*<Link href="/collections/create">*/}
-                                    {/*    <Button colorScheme="blue" variant="outline" mr={5}>Edit</Button>*/}
-                                    {/*</Link>*/}
+                                    <Link href={`/collections/${collection.id}/update`}>
+                                        <Button colorScheme="blue" variant="outline" mr={5}>Edit</Button>
+                                    </Link>
                                 </Td>
                             </Tr>
                         )}
