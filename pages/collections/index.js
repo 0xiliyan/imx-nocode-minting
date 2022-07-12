@@ -52,7 +52,7 @@ const Collections = () => {
                                 <Td>{collection.mint_cost} ETH</Td>
                                 <Td>{collection.max_mints_per_user ? `${collection.max_mints_per_user} per user` : 'unlimited'}</Td>
                                 <Td>
-                                    <Link href="/collections/create">
+                                    <Link  href={`/collections/${collection.id}/mint`}>
                                         <Button colorScheme="blue" variant="outline" mr={5}>Mint</Button>
                                     </Link>
                                     <Link href={`/collections/${collection.id}/airdrop`}>
