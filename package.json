@@ -20,6 +20,7 @@
     "fast-csv": "^4.3.6",
     "formidable": "^2.0.1",
     "framer-motion": "^6.3.16",
+    "moment": "^2.29.4",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "next": "12.1.6",

@@ -8,6 +8,7 @@ export const connection = mysql({
         password: config.dbPass,
         database: config.dbName,
         port: 3306,
-        multipleStatements: true
+        multipleStatements: true,
+        manageConns: false,
     },
 });
