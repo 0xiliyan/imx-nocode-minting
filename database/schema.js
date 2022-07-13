@@ -18,6 +18,7 @@ export default {
         CREATE TABLE \`collections\`
         (
             \`id\`   bigint       NOT NULL AUTO_INCREMENT,
+            \`app_network\`   varchar(255)       NOT NULL,
             \`imx_collection_id\`   varchar(255)       NOT NULL,
             \`contract_owner_address\`   varchar(255),
             \`contract_owner_private_key\`   varchar(255),
@@ -30,7 +31,8 @@ export default {
             \`collection_size\` int NOT NULL,
             \`mint_cost\` decimal(5, 2) NOT NULL,
             \`max_mints_per_user\` int DEFAULT '0',
-            \`mint_deposit_address\` int DEFAULT '0',
+            \`mint_deposit_address\` varchar(255) NOT NULL,
+            \`mint_deposit_layer\` varchar(255) NOT NULL,
             \`royalty_receiver_address\` varchar(255),
             \`royalty_percentage\` decimal(5, 2),
             PRIMARY KEY (\`id\`),

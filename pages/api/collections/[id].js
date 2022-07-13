@@ -44,15 +44,15 @@ const updateCollection = async (req, res) => {
                 collection_image_url: req.body.collection_image_url,
                 collection_size: req.body.collection_size,
                 mint_cost: req.body.mint_cost,
-                max_mints_per_user: req.body.max_mints_per_user,
+                max_mints_per_user: req.body.max_mints_per_user ? req.body.max_mints_per_user : null,
+                mint_deposit_address: req.body.mint_deposit_address,
+                mint_deposit_layer: req.body.mint_deposit_layer,
             }, req.query.id]);
 
         return res.status(200).json({collection_id: req.query.id});
     } catch (error) {
         res.status(200).json({error});
     }
-
-    return res.status(200).json(result);
 }
 
 const deleteCollection = async (req, res) => {

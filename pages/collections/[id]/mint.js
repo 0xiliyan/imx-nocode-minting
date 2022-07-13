@@ -28,10 +28,17 @@ const Mint = () => {
         setCollection(data);
     }
 
-    const mint = async () => {
+    const readPaymentTransactions = async () => {
         if (checkIsFormValid()) {
+            // setIsLoading(true);
             setFormHasErrors(false);
 
+            const {data} = await axios.post(`/api/import-transactions${collection.mint_deposit_layer == 'l2' ? '-l2' : ''}`, {
+                collection_id: collection.id
+            });
+
+            console.log(data);
+            setIsLoading(false);
         }
         else {
             setFormHasErrors(true);
@@ -39,35 +46,22 @@ const Mint = () => {
     }
 
     const checkIsFormValid = () => {
-        return (depositWalletAddress && paymentLayer) ? true : false;
+        return true;
     }
 
     return (
         <>
             <Heading as="h3" size="lg" mb={15}>{collection.name} - Read L1/L2 Payment Transactions and Mint NFTs</Heading>
+            <Heading as="h4" size="sm" mb={15}>Automatically reads Airdrop requests as well imported into database</Heading>
             <Box mt="25" width="700px">
                 <Section>
-                    <FormControl mb="5" isRequired>
-                        <FormLabel htmlFor='email'>Deposit Wallet Address</FormLabel>
-                        <Input onChange={(e) => setDepositWalletAddress(e.target.value)} value={depositWalletAddress} isInvalid={formHasErrors && !depositWalletAddress} />
-                    </FormControl>
-                    <FormControl mb="5" isRequired>
-                        <FormLabel htmlFor='email'>What blockchain do you use to accept NFT payment transfers?</FormLabel>
-                        <Select onChange={(e) => setPaymentLayer(e.target.value)} isInvalid={formHasErrors && !paymentLayer}>
-                            <option value=''>Please Select</option>
-                            <option value='l1'>Ethereum (ETH L1)</option>
-                            <option value='l2'>ImmutableX (ETH L2)</option>
-                        </Select>
-                    </FormControl>
-                    <Button colorScheme="blue" onClick={mint} isLoading={isLoading}>
-                        Read Payments to Deposit Address & Mint NFTs
+                    <Text mb={15}>Collection is set up to accept payment transactions on <b>{collection.mint_deposit_layer == 'l1' ? 'Ethereum L1' : 'ImmutableX L2'}</b> to the following deposit address: <b>{collection.mint_deposit_address}</b></Text>
+                    <Button colorScheme="blue" onClick={readPaymentTransactions} isLoading={isLoading}>
+                        Read Payment Transactions
                     </Button>
                     {formHasErrors &&
                         <Text fontSize="sm" color="red" mt="4">Form has errors, please check fields above</Text>
                     }
-                    {/*{processedRows &&*/}
-                    {/*<Box mt={5}><b>Imported rows for airdrop: {`${processedRows}`}</b></Box>*/}
-                    {/*}*/}
                 </Section>
             </Box>
         </>

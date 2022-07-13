@@ -32,7 +32,7 @@ export const Section = styled.div`
 `
 
 const AppNetwork = styled.div`
-    background: #10cbc5;
+    background: #19cdc7;
     color: #fff;
     font-size: 14px;
     font-weight: bold;
@@ -86,7 +86,7 @@ const Layout = ({children}) => {
                     }
                 </Header>
             </Flex>
-            <Container maxW="1400px">
+            <Container maxW="1500px">
                 <Content>
                     {children}
                 </Content>

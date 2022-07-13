@@ -29,6 +29,15 @@ export default {
     etherscanApiRopsten: 'https://api-ropsten.etherscan.io/api',
     infuraApiUrl: 'https://mainnet.infura.io/v3/your_api_key',
     infuraApiUrlRopsten: 'https://ropsten.infura.io/v3/your_api_key',
+    // Address of your registered contract on Immutable X
+    // Your contract address mainnet
+    tokenContractAddress: '',
+    // ropsten or mainnet
+    tokenContractNetwork: '',
+    // your contract owner wallet address
+    minterAddress: '',
+    // Private key for the wallet that is the contract's owner
+    minterPrivateKey: '',
     // frontend configuration
     whitelistedAddresses: [],
     mintBatchSize: 100,

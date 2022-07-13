@@ -6,7 +6,7 @@ import {sleep} from "../../helpers/utils";
 import {ethers} from "ethers";
 
 export default function handler(req, res) {
-    if (req.method === 'GET') {
+    if (req.method === 'POST') {
         return importTransactionsL2(req, res);
     }
 }
@@ -18,39 +18,38 @@ export default function handler(req, res) {
  * @returns {Promise<void>}
  */
 const importTransactionsL2 = async (req, res) => {
-    const projectId = req.query.collection_id;
+    const collectionId = req.body.collection_id;
+    const result = await connection.query("SELECT * FROM collections WHERE id = ?",
+        [collectionId]
+    );
+    const collection = result[0];
+
     let cursor = '';
     let remaining = 1;
 
-    while (true) {
-        console.log('Looking for transactions to import ...');
+    while (remaining > 0) {
+        const url = `https://api.${config.appNetwork == 'ropsten' ? 'ropsten.' : ''}x.immutable.com/v1/transfers?receiver=${collection.mint_deposit_address}&status=success&token_type=ETH&cursor=${cursor}`;
+        const {data} = await axios.get(url);
+        const transactions = data.result;
 
-        while (remaining > 0) {
-            const {data} = await axios.get(`https://api.ropsten.x.immutable.com/v1/transfers?receiver=${config.minterAddress}&status=success&token_type=ETH&cursor=${cursor}`);
-            const transactions = data.result;
+        transactions.forEach(async (transaction) => {
+            const etherValue = parseFloat(ethers.utils.formatEther(transaction.token.data.quantity));
+            const tokensAllowed = etherValue / collection.mint_cost;
 
-            transactions.forEach(async (transaction) => {
-                const etherValue = parseFloat(ethers.utils.formatEther(transaction.token.data.quantity));
-                const tokensAllowed = etherValue / config.mintCost;
+            await connection.query('INSERT INTO mints SET collection_id = ?, tx_hash = ?, wallet = ?, tokens_allowed = ?, tx_ether_value = ?',
+                [collectionId, transaction.transaction_id, transaction.user, tokensAllowed, etherValue], (error, results, fields) => {
+                    if (error) {
+                        // console.log(error);
+                    } else {
+                        console.log(`Transfer from wallet ${transaction.user} for ${etherValue} has been imported. IMX Transaction hash: ${transaction.transaction_id}`);
+                    }
+                });
+        });
 
-                await connection.query('INSERT INTO mints SET project_id = ?, tx_hash = ?, wallet = ?, tokens_allowed = ?, tx_ether_value = ?',
-                    [projectId, transaction.transaction_id, transaction.user, tokensAllowed, etherValue], (error, results, fields) => {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log(`Transfer from wallet ${transaction.user} for ${etherValue} has been imported. IMX Transaction has: ${transaction.transaction_id}`);
-                        }
-                    });
-            });
-
-            // cursor for next page
-            cursor = data.cursor;
-            remaining = data.remaining;
-        } // while we have new pages to fetch
-
-        console.log('Waiting before poll ...');
-        await sleep(60000);
-    }
+        // cursor for next page
+        cursor = data.cursor;
+        remaining = data.remaining;
+    } // while we have new pages to fetch
 
     return res.status(200).json({result: true});
 }

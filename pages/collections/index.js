@@ -27,47 +27,51 @@ const Collections = () => {
     return (
         <>
             <Heading as="h3" size="lg" mb={15}>NFT Collections</Heading>
-            <Section>
-                <TableContainer>
-                <Table variant='simple' size='sm'>
-                    <TableCaption>Your Collections on ImmutableX</TableCaption>
-                    <Thead>
-                        <Tr>
-                            <Th>Name</Th>
-                            <Th>Contract Address</Th>
-                            <Th>Project</Th>
-                            <Th>NFT Collection Size</Th>
-                            <Th>Mint Cost</Th>
-                            <Th>Max Mints</Th>
-                            <Th></Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {collections.map(collection =>
-                            <Tr key={collection.id}>
-                                <Td>{collection.name}</Td>
-                                <Td>{collection.imx_collection_id}</Td>
-                                <Td>{collection.project_name}</Td>
-                                <Td>{collection.collection_size}</Td>
-                                <Td>{collection.mint_cost} ETH</Td>
-                                <Td>{collection.max_mints_per_user ? `${collection.max_mints_per_user} per user` : 'unlimited'}</Td>
-                                <Td>
-                                    <Link  href={`/collections/${collection.id}/mint`}>
-                                        <Button colorScheme="blue" variant="outline" mr={5}>Mint</Button>
-                                    </Link>
-                                    <Link href={`/collections/${collection.id}/airdrop`}>
-                                        <Button colorScheme="blue" variant="outline" mr={5}>Airdrop</Button>
-                                    </Link>
-                                    <Link href={`/collections/${collection.id}/update`}>
-                                        <Button colorScheme="blue" variant="outline" mr={5}>Edit</Button>
-                                    </Link>
-                                </Td>
-                            </Tr>
-                        )}
-                    </Tbody>
-                </Table>
-            </TableContainer>
-            </Section>
+            {collections.length > 0 &&
+                <Section>
+                    <TableContainer>
+                        <Table variant='simple' size='sm'>
+                            <TableCaption>Your Collections on ImmutableX</TableCaption>
+                            <Thead>
+                                <Tr>
+                                    <Th>Name</Th>
+                                    <Th>Contract Address</Th>
+                                    <Th>Project</Th>
+                                    <Th>NFT Collection Size</Th>
+                                    <Th>Mint Cost</Th>
+                                    <Th>Max Mints</Th>
+                                    <Th>Payments</Th>
+                                    <Th></Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {collections.map(collection =>
+                                    <Tr key={collection.id}>
+                                        <Td>{collection.name}</Td>
+                                        <Td>{collection.imx_collection_id}</Td>
+                                        <Td>{collection.project_name}</Td>
+                                        <Td>{collection.collection_size}</Td>
+                                        <Td>{collection.mint_cost} ETH</Td>
+                                        <Td>{collection.max_mints_per_user ? `${collection.max_mints_per_user} per user` : 'Unlimited'}</Td>
+                                        <Td>{collection.mint_deposit_layer == 'l1' ? `ETH L1` : 'ETH L2'}</Td>
+                                        <Td>
+                                            <Link href={`/collections/${collection.id}/mint`}>
+                                                <Button colorScheme="blue" variant="outline" mr={5}>Mint</Button>
+                                            </Link>
+                                            <Link href={`/collections/${collection.id}/airdrop`}>
+                                                <Button colorScheme="blue" variant="outline" mr={5}>Airdrop</Button>
+                                            </Link>
+                                            <Link href={`/collections/${collection.id}/update`}>
+                                                <Button colorScheme="blue" variant="outline" mr={5}>Edit</Button>
+                                            </Link>
+                                        </Td>
+                                    </Tr>
+                                )}
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
+                </Section>
+            }
             <Box mt="25" width="500px">
                 <Link href="/collections/create">
                     <Button colorScheme="blue">

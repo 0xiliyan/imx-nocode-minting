@@ -61,6 +61,8 @@ const CreateCollection = () => {
                 collection_size: collection.collection_size,
                 mint_cost: collection.mint_cost,
                 max_mints_per_user: collection.max_mints_per_user,
+                mint_deposit_address: collection.mint_deposit_address,
+                mint_deposit_layer: collection.mint_deposit_layer,
             });
 
             if (response.data.collection_id) {
@@ -78,7 +80,8 @@ const CreateCollection = () => {
 
     const checkIsFormValid = () => {
         let result = collection.collection_name && collection.collection_description && collection.icon_url &&
-            collection.metadata_api_url && collection.collection_image_url && collection.collection_size && collection.mint_cost;
+            collection.metadata_api_url && collection.collection_image_url && collection.collection_size &&
+            collection.mint_cost && collection.mint_deposit_address && collection.mint_deposit_layer;
 
         if (project === 'new_project') {
             result = result && collection.project_name && collection.company_name && collection.contact_email;
@@ -92,6 +95,10 @@ const CreateCollection = () => {
             <Heading as="h3" size="lg" mb={15}>Create a new NFT collection</Heading>
             <Box width="700px">
                 <Section>
+                    <FormControl mb="5">
+                        <FormLabel htmlFor='email'>Currently Deployed Contract Address (Will be used for this collection)</FormLabel>
+                        <b>{config.tokenContractAddress}</b>
+                    </FormControl>
                 <FormControl mb="5" isRequired>
                     <FormLabel htmlFor='email'>Select Project</FormLabel>
                     <Select onChange={(e) => setProject(e.target.value)} value={project}>
@@ -111,12 +118,12 @@ const CreateCollection = () => {
                             <FormLabel htmlFor='email'>Company Name</FormLabel>
                             <Input placeholder="" onChange={(e) => setCollection(prevState => ({...prevState, company_name: e.target.value}))} value={collection.company_name} isInvalid={formHasErrors && !collection.company_name} />
                         </FormControl>
+                        <FormControl mb="5" isRequired>
+                            <FormLabel htmlFor='email'>Contact Email</FormLabel>
+                            <Input placeholder="" onChange={(e) => setCollection(prevState => ({...prevState, contact_email: e.target.value}))} value={collection.contact_email} isInvalid={formHasErrors && !collection.contact_email} />
+                        </FormControl>
                     </>
                 }
-                <FormControl mb="5" isRequired>
-                    <FormLabel htmlFor='email'>Contact Email</FormLabel>
-                    <Input placeholder="" onChange={(e) => setCollection(prevState => ({...prevState, contact_email: e.target.value}))} value={collection.contact_email} isInvalid={formHasErrors && !collection.contact_email} />
-                </FormControl>
                 <FormControl mb="5" isRequired>
                     <FormLabel htmlFor='email'>Collection Name</FormLabel>
                     <Input placeholder="" onChange={(e) => setCollection(prevState => ({...prevState, collection_name: e.target.value}))} value={collection.collection_name} isInvalid={formHasErrors && !collection.collection_name} />
@@ -148,6 +155,19 @@ const CreateCollection = () => {
                 <FormControl mb="5">
                     <FormLabel htmlFor='email'>Max Mints Per User (Leave blank for unlimited)</FormLabel>
                     <Input placeholder="" onChange={(e) => setCollection(prevState => ({...prevState, max_mints_per_user: e.target.value}))} value={collection.max_mints_per_user} />
+                </FormControl>
+                <FormControl mb="5" isRequired>
+                    <FormLabel htmlFor='email'>Deposit Wallet Address</FormLabel>
+                    <Input onChange={(e) => setCollection(prevState => ({...prevState, mint_deposit_address: e.target.value}))} value={collection.mint_deposit_address} isInvalid={formHasErrors && !collection.mint_deposit_address} />
+                    <FormHelperText>Address on your frontend minting dapp where you take payment transfers for NFT mints</FormHelperText>
+                </FormControl>
+                <FormControl mb="5" isRequired>
+                    <FormLabel htmlFor='email'>What blockchain are you going to use to accept NFT payment transfers in your minting dapp?</FormLabel>
+                    <Select onChange={(e) => setCollection(prevState => ({...prevState, mint_deposit_layer: e.target.value}))} isInvalid={formHasErrors && !collection.mint_deposit_layer}>
+                        <option value=''>Please Select</option>
+                        <option value='l1'>Ethereum (ETH L1)</option>
+                        <option value='l2'>ImmutableX (ETH L2)</option>
+                    </Select>
                 </FormControl>
                 <Button colorScheme="blue" onClick={saveCollection} isLoading={isLoading}>
                     Create Collection

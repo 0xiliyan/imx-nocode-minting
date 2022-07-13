@@ -29,3 +29,4 @@ yarn-error.log*
 .vercel
 .idea
 config.js
+/storage/airdrops/import.csv

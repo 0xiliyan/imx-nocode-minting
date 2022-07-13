@@ -74,6 +74,7 @@ const deployContract = async (req, res) => {
             // update deployed contract address
             const newConfig = {...config};
             newConfig.tokenContractAddress = _address;
+            newConfig.tokenContractNetwork = config.appNetwork;
             updateConfig(newConfig);
 
             return _address;

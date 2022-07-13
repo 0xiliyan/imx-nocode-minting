@@ -44,7 +44,7 @@ const Home = () => {
     return (
         <>
             <Heading as="h3" size="lg" mb={15}>General Config</Heading>
-            <Heading as="h4" size="xs" mb={15}>Set up the configuration below in order to start minting</Heading>
+            <Heading as="h4" size="xs" mb={15}>Set up the configuration below in order to start creating collections and gas free minting NFTs on ImmutableX</Heading>
             <Box width="700px">
                 <Section>
                     <FormControl mb="5" isRequired>

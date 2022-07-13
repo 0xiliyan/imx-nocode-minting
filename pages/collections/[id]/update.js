@@ -44,9 +44,10 @@ const UpdateCollection = () => {
                 collection_size: collection.collection_size,
                 mint_cost: collection.mint_cost,
                 max_mints_per_user: collection.max_mints_per_user,
+                mint_deposit_address: collection.mint_deposit_address,
+                mint_deposit_layer: collection.mint_deposit_layer,
             });
 
-            console
             if (response.data.collection_id) {
                 Router.push('/collections');
             }
@@ -62,7 +63,8 @@ const UpdateCollection = () => {
 
     const checkIsFormValid = () => {
         let result = collection.name && collection.description && collection.icon_url &&
-            collection.metadata_api_url && collection.collection_image_url && collection.collection_size && collection.mint_cost;
+            collection.metadata_api_url && collection.collection_image_url && collection.collection_size &&
+            collection.mint_cost && collection.mint_deposit_address && collection.mint_deposit_layer;
 
         return result ? true : false;
     }
@@ -103,6 +105,19 @@ const UpdateCollection = () => {
                     <FormControl mb="5">
                         <FormLabel htmlFor='email'>Max Mints Per User (Leave blank for unlimited)</FormLabel>
                         <Input placeholder="" onChange={(e) => setCollection(prevState => ({...prevState, max_mints_per_user: e.target.value}))} value={collection.max_mints_per_user} />
+                    </FormControl>
+                    <FormControl mb="5" isRequired>
+                        <FormLabel htmlFor='email'>Deposit Wallet Address</FormLabel>
+                        <Input onChange={(e) => setCollection(prevState => ({...prevState, mint_deposit_address: e.target.value}))} value={collection.mint_deposit_address} isInvalid={formHasErrors && !collection.mint_deposit_address} />
+                        <FormHelperText>Address on your frontend minting dapp where you take payment transfers for NFT mints</FormHelperText>
+                    </FormControl>
+                    <FormControl mb="5" isRequired>
+                        <FormLabel htmlFor='email'>What blockchain do you use to accept NFT payment transfers?</FormLabel>
+                        <Select onChange={(e) => setCollection(prevState => ({...prevState, mint_deposit_layer: e.target.value}))} value={collection.mint_deposit_layer} isInvalid={formHasErrors && !collection.mint_deposit_layer}>
+                            <option value=''>Please Select</option>
+                            <option value='l1'>Ethereum (ETH L1)</option>
+                            <option value='l2'>ImmutableX (ETH L2)</option>
+                        </Select>
                     </FormControl>
                     <Button colorScheme="blue" onClick={saveCollection} isLoading={isLoading}>
                         Update Collection
