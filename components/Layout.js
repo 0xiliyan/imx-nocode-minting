@@ -86,7 +86,7 @@ const Layout = ({children}) => {
                     }
                 </Header>
             </Flex>
-            <Container maxW="1500px">
+            <Container maxW="1550px">
                 <Content>
                     {children}
                 </Content>

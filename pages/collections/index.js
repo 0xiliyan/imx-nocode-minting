@@ -37,7 +37,8 @@ const Collections = () => {
                                     <Th>Name</Th>
                                     <Th>Contract Address</Th>
                                     <Th>Project</Th>
-                                    <Th>NFT Collection Size</Th>
+                                    <Th>Total Size</Th>
+                                    <Th>Last Minted ID</Th>
                                     <Th>Mint Cost</Th>
                                     <Th>Max Mints</Th>
                                     <Th>Payments</Th>
@@ -50,7 +51,8 @@ const Collections = () => {
                                         <Td>{collection.name}</Td>
                                         <Td>{collection.imx_collection_id}</Td>
                                         <Td>{collection.project_name}</Td>
-                                        <Td>{collection.collection_size}</Td>
+                                        <Td>{collection.collection_size} NFTs</Td>
+                                        <Td>{collection.last_token_id ? collection.last_token_id : 'n/a'}</Td>
                                         <Td>{collection.mint_cost} ETH</Td>
                                         <Td>{collection.max_mints_per_user ? `${collection.max_mints_per_user} per user` : 'Unlimited'}</Td>
                                         <Td>{collection.mint_deposit_layer == 'l1' ? `ETH L1` : 'ETH L2'}</Td>

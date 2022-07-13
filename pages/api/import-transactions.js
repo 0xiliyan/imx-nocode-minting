@@ -2,7 +2,7 @@ import schema from "../../database/schema.js";
 import {connection} from "../../helpers/db";
 import config from "../../config";
 import axios from "axios";
-import ethers from "ethers";
+import {ethers} from "ethers";
 
 export default function handler(req, res) {
     if (req.method === 'POST') {
