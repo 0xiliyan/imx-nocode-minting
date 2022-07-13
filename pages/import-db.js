@@ -10,6 +10,7 @@ import {Section} from "../components/Layout";
 const ImportDatabase = () => {
     const [currentConfig, setCurrentConfig] = useState(config);
     const [databaseImported, setDatabaseImported] = useState(config.databaseImported);
+    const [isLoading, setIsLoading] = useState(false);
 
     const updateConfig = (key, value) => {
         const newConfig = {...currentConfig};
@@ -18,10 +19,12 @@ const ImportDatabase = () => {
     }
 
     const importDb = async () => {
+        setIsLoading(true);
         const response = await axios.post('/api/import-database');
 
         if (response.data.result) {
             setDatabaseImported(true);
+            setIsLoading(false);
         }
     }
 
@@ -36,7 +39,7 @@ const ImportDatabase = () => {
                             <AlertIcon />
                             Database Imported!
                         </Alert> :
-                        <Button colorScheme="blue" onClick={importDb}>Import</Button>
+                        <Button colorScheme="blue" onClick={importDb} isLoading={isLoading}>Import</Button>
                     }
                 </Section>
             </Box>

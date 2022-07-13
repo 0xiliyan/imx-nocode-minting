@@ -19,6 +19,8 @@ export default {
         (
             \`id\`   bigint       NOT NULL AUTO_INCREMENT,
             \`imx_collection_id\`   varchar(255)       NOT NULL,
+            \`contract_owner_address\`   varchar(255),
+            \`contract_owner_private_key\`   varchar(255),
             \`project_id\` bigint NOT NULL,
             \`name\` varchar(255) NOT NULL,
             \`description\` TEXT,
@@ -28,6 +30,9 @@ export default {
             \`collection_size\` int NOT NULL,
             \`mint_cost\` decimal(5, 2) NOT NULL,
             \`max_mints_per_user\` int DEFAULT '0',
+            \`mint_deposit_address\` int DEFAULT '0',
+            \`royalty_receiver_address\` varchar(255),
+            \`royalty_percentage\` decimal(5, 2),
             PRIMARY KEY (\`id\`),
             KEY \`collections_FK\` (\`project_id\`),
             CONSTRAINT \`collections_FK\` FOREIGN KEY (\`project_id\`) REFERENCES \`projects\` (\`id\`) ON DELETE CASCADE ON UPDATE CASCADE

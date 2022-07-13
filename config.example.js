@@ -27,26 +27,8 @@ export default {
     etherscanApiKey: '',
     etherscanApi: 'https://api.etherscan.io/api',
     etherscanApiRopsten: 'https://api-ropsten.etherscan.io/api',
-    // used by import_transactions script
-    mintDepositAddress: '',
-    // your contract owner wallet address
-    minterAddress: '',
-    // Private key for the wallet that is the contract's owner
-    minterPrivateKey: '',
     infuraApiUrl: 'https://mainnet.infura.io/v3/your_api_key',
     infuraApiUrlRopsten: 'https://ropsten.infura.io/v3/your_api_key',
-    // Address of your registered contract on Immutable X
-    // Your contract address mainnet
-    tokenContractAddress: '',
-    // Royalty receiver address
-    royaltyReceiverAddress: '',
-    royaltyPercentage: 2,
-    // collection configuration
-    collectionName: '', // e.g. "BoredApeYachtClub"
-    collectionSymbol: '', // e.g. "BAYC"
-    collectionCount: 10000,
-    mintCost: '',
-    maxMintsForUser: 0, // zero means unlimited
     // frontend configuration
     whitelistedAddresses: [],
     mintBatchSize: 100,
