@@ -12,6 +12,7 @@ const getMints = async (req, res) => {
     if (req.query.type == 'minted') {
         result = await connection.query(`SELECT * FROM mints
             WHERE collection_id = ? AND tokens_minted >= tokens_allowed
+            AND wallet LIKE ${connection.escape('%' + req.query.search.trim() + '%')}
             ORDER BY created_at DESC`,
             [req.query.collection_id]
         );
@@ -19,6 +20,7 @@ const getMints = async (req, res) => {
     else if (req.query.type == 'not_minted') {
         result = await connection.query(`SELECT * FROM mints
             WHERE collection_id = ? AND tokens_minted < tokens_allowed
+            AND wallet LIKE ${connection.escape('%' + req.query.search.trim() + '%')}
             ORDER BY created_at DESC`,
             [req.query.collection_id]
         );

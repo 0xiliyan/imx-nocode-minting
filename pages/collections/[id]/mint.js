@@ -17,17 +17,27 @@ const Mint = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [mintedTokens, setMintedTokens] = useState([]);
     const [notMintedTokens, setNotMintedTokens] = useState([]);
+    const [notMintedSearch, setNotMintedSearch] = useState('');
+    const [mintedSearch, setMintedSearch] = useState('');
 
     useEffect(() => {
         if (router.query.id) {
-            getCollection(router.query.id);
-            getNotMintedTokens(router.query.id);
-            getMintedTokens(router.query.id);
+            getCollection();
+            getNotMintedTokens();
+            getMintedTokens();
         }
     }, [router.query.id]);
 
-    const getCollection = async (collectionId) => {
-        const {data} = await axios.get(`/api/collections/${collectionId}`);
+    useEffect(() => {
+        getNotMintedTokens(notMintedSearch);
+    }, [notMintedSearch]);
+
+    useEffect(() => {
+        getMintedTokens(mintedSearch);
+    }, [mintedSearch]);
+
+    const getCollection = async () => {
+        const {data} = await axios.get(`/api/collections/${router.query.id}`);
         setCollection(data);
     }
 
@@ -39,17 +49,17 @@ const Mint = () => {
         });
 
         // load minted and not minted tokens
-        await getNotMintedTokens(collection.id);
+        await getNotMintedTokens();
         setIsLoading(false);
     }
 
-    const getNotMintedTokens = async (collectionId) => {
-        const {data} = await axios.get(`/api/mints?collection_id=${collectionId}&type=not_minted`);
+    const getNotMintedTokens = async (search = '') => {
+        const {data} = await axios.get(`/api/mints?collection_id=${router.query.id}&type=not_minted&search=${search}`);
         setNotMintedTokens(data);
     }
 
-    const getMintedTokens = async (collectionId) => {
-        const {data} = await axios.get(`/api/mints?collection_id=${collectionId}&type=minted`);
+    const getMintedTokens = async (search = '') => {
+        const {data} = await axios.get(`/api/mints?collection_id=${router.query.id}&type=minted&search=${search}`);
         setMintedTokens(data);
     }
 
@@ -63,11 +73,12 @@ const Mint = () => {
                     <Button colorScheme="blue" onClick={readPaymentTransactions} isLoading={isLoading}>Read Payment Transactions</Button>
                 </Section>
             </Box>
-            {notMintedTokens.length > 0 &&
-                <>
-                    <Heading as="h3" size="md" mt={35}>Pending Mints</Heading>
-                    <Box mt="25">
-                        <Section>
+            <Heading as="h3" size="md" mt={35}>Pending Mints</Heading>
+            <Box mt="25">
+                <Section>
+                    <Input onChange={(e) => setNotMintedSearch(e.target.value)} value={notMintedSearch} placeholder="Search pending mints by wallet address" width="400px" mb="25" />
+                    {notMintedTokens.length > 0 &&
+                        <>
                             <TableContainer>
                                 <Table variant='simple' size='sm'>
                                     <Thead>
@@ -78,7 +89,7 @@ const Mint = () => {
                                             <Th>Type</Th>
                                             <Th>Date Imported</Th>
                                         </Tr>
-                                        </Thead>
+                                    </Thead>
                                     <Tbody>
                                         {notMintedTokens.map(mint =>
                                             <Tr key={mint.id}>
@@ -92,16 +103,18 @@ const Mint = () => {
                                     </Tbody>
                                 </Table>
                             </TableContainer>
-                            <Button colorScheme="blue" onClick={readPaymentTransactions} isLoading={isLoading} mt={35}>Mint NFTs</Button>
-                        </Section>
-                    </Box>
-                </>
-            }
-            {mintedTokens.length > 0 &&
-            <>
-                <Heading as="h3" size="md" mt={35}>Minted Tokens</Heading>
-                <Box mt="25">
-                    <Section>
+                            <Button colorScheme="blue" onClick={readPaymentTransactions} isLoading={isLoading}
+                                    mt={35}>Mint NFTs</Button>
+                        </>
+                    }
+                </Section>
+            </Box>
+            <Heading as="h3" size="md" mt={35}>Minted Tokens</Heading>
+            <Box mt="25">
+                <Section>
+                    <Input onChange={(e) => setMintedSearch(e.target.value)} value={mintedSearch} placeholder="Search minted tokens by wallet address" width="400px" mb="25" />
+                    {mintedTokens.length > 0 &&
+                        <>
                         <TableContainer>
                             <Table variant='simple' size='sm'>
                                 <Thead>
@@ -126,10 +139,10 @@ const Mint = () => {
                                 </Tbody>
                             </Table>
                         </TableContainer>
-                    </Section>
-                </Box>
-            </>
-            }
+                        </>
+                    }
+                </Section>
+            </Box>
             {collection &&
                 <>
                     <Heading as="h3" size="md" mt={35}>Last Minted Token ID</Heading>
