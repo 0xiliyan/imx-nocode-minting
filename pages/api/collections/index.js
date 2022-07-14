@@ -28,10 +28,15 @@ const storeCollection = async (req, res) => {
         });
 
         // persist to database
-        const result = await connection.query("INSERT INTO collections(app_network, imx_collection_id, contract_owner_address, contract_owner_private_key, name, project_id, description, icon_url, metadata_api_url, collection_image_url, collection_size, mint_cost, max_mints_per_user, mint_deposit_address, mint_deposit_layer) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        let result = await connection.query("INSERT INTO collections(app_network, imx_collection_id, contract_owner_address, contract_owner_private_key, name, project_id, description, icon_url, metadata_api_url, collection_image_url, collection_size, mint_cost, max_mints_per_user, mint_deposit_address, mint_deposit_layer) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [config.appNetwork, collection.address, config.minterAddress, config.minterPrivateKey, req.body.name, req.body.project_id, req.body.description, req.body.icon_url, req.body.metadata_api_url, req.body.collection_image_url, req.body.collection_size, req.body.mint_cost, req.body.max_mints_per_user, req.body.mint_deposit_address, req.body.mint_deposit_layer]);
 
-        return res.status(200).json({collection_id: result.insertId});
+        const collectionId = result.insertId;
+        await connection.query("INSERT INTO token_trackers(collection_id, last_token_id) VALUES(?,?)",
+            [collectionId, 0]);
+
+        // create token_trackers record for this collection
+        return res.status(200).json({collection_id: collectionId});
     } catch (error) {
         res.status(200).json({error});
     }

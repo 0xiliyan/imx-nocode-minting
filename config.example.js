@@ -40,7 +40,7 @@ export default {
     minterPrivateKey: '',
     // frontend configuration
     whitelistedAddresses: [],
-    mintBatchSize: 100,
+    mintBatchSize: 10000,
     endSaleAtDepositAmount: 0,
     isMintingEnabled: false,
     whitelistOnly: false,

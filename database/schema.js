@@ -65,6 +65,7 @@ export default {
             \`block_number\`   bigint                                                        DEFAULT NULL,
             \`tx_ether_value\` decimal(30, 20)                                               DEFAULT NULL,
             \`created_at\`     timestamp    NULL                                             DEFAULT CURRENT_TIMESTAMP,
+            \`last_minted_at\`     timestamp    NULL,
             \`metadata\`       json                                                          DEFAULT NULL,
             PRIMARY KEY (\`id\`),
             UNIQUE KEY \`mints_UN\` (\`tx_hash\`, \`wallet\`),

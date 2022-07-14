@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {Button, ChakraProvider, Heading, Input} from '@chakra-ui/react'
+import {Button, ChakraProvider, extendTheme, Heading, Input, withDefaultColorScheme} from '@chakra-ui/react'
 import {Box, Container, Flex} from "@chakra-ui/layout";
 import Link from "next/link";
 import styled, { css } from 'styled-components';
@@ -32,8 +32,8 @@ export const Section = styled.div`
 `
 
 const AppNetwork = styled.div`
-    background: #19cdc7;
-    color: #fff;
+    background: #7AF5FA;
+    color: #000;
     font-size: 14px;
     font-weight: bold;
     padding: 5px 20px;
@@ -44,9 +44,9 @@ const AppNetwork = styled.div`
 const Layout = ({children}) => {
     return (
         <ChakraProvider>
-            <Flex align="center" background="white" p={5}>
-                <Img src="/img/imx-nocode-minter.png" />
-                <AppNetwork>{config.appNetwork.charAt(0).toUpperCase() + config.appNetwork.slice(1)}</AppNetwork>
+            <Flex align="center" background="white" p={3}>
+                <Img src="/img/imx-nocode-minter.png" height="65px" />
+                    <AppNetwork>{config.appNetwork.charAt(0).toUpperCase() + config.appNetwork.slice(1)}</AppNetwork>
                 <Header>
                     <LinkItem>
                         <Link href="/">
@@ -72,16 +72,6 @@ const Layout = ({children}) => {
                                 <Button variant="ghost" colorScheme="gray">NFT Collections</Button>
                             </Link>
                         </LinkItem>
-                        {/*<LinkItem>*/}
-                        {/*    <Link href="/whitelist">*/}
-                        {/*        <Button variant='outline'>Import Whitelist</Button>*/}
-                        {/*    </Link>*/}
-                        {/*</LinkItem>*/}
-                        {/*<LinkItem>*/}
-                        {/*    <Link href="/mint">*/}
-                        {/*        <Button variant='outline'>Mint NFTs</Button>*/}
-                        {/*    </Link>*/}
-                        {/*</LinkItem>*/}
                     </>
                     }
                 </Header>

@@ -13,7 +13,13 @@ export default function handler(req, res) {
 }
 
 const mint = async (req, res) => {
-    const collectionId = req.query.collection_id;
+    const collectionId = req.body.collection_id;
+
+    const result = await connection.query("SELECT * FROM collections WHERE id = ?",
+        [collectionId]
+    );
+    const collection = result[0];
+
     const {provider, client} = await getImxSDK();
 
     // this function blocks until the transaction is either mined or rejected
@@ -72,8 +78,8 @@ const mint = async (req, res) => {
 
     const updateUserTokensMinted = (recordId, newTokensMinted, metadata) => {
         return new Promise((resolve, reject) => {
-            connection.query('UPDATE mints SET tokens_minted = ?, metadata = ? WHERE id = ?',
-                [newTokensMinted, JSON.stringify(metadata), recordId], (error, results, fields) => {
+            connection.query('UPDATE mints SET tokens_minted = ?, metadata = ?, last_minted_at = ? WHERE id = ?',
+                [newTokensMinted, JSON.stringify(metadata), new Date(), recordId], (error, results, fields) => {
                     if (error) {
                         reject();
                         console.log(error);
@@ -86,110 +92,106 @@ const mint = async (req, res) => {
 
 
     const main = async () => {
-        // Registering the user (owner of the contract) with IMX
-        const registerImxResult = await client.registerImx({
-            // address derived from PK
-            etherKey: client.address.toLowerCase(),
-            starkPublicKey: client.starkPublicKey,
-        });
+        const isRegistered = await client.isRegistered({user: client.address.toLowerCase()});
 
         // If the user is already registered, there's is no transaction to await, hence no tx_hash
-        if (registerImxResult.tx_hash === '') {
+        if (isRegistered) {
             console.info('Minter registered, continuing...');
         } else {
             // If the user isn't registered, we have to wait for the block containing the registration TX to be mined
             // This is a one-time process (per address)
             console.info('Waiting for minter registration...');
+
+            const registerImxResult = await client.registerImx({
+                // address derived from PK
+                etherKey: client.address.toLowerCase(),
+                starkPublicKey: client.starkPublicKey,
+            });
+
             await waitForTransaction(Promise.resolve(registerImxResult.tx_hash));
         }
 
         let lastMintedId = await getLastMintedTokenId();
-        const collectionCount = config.collectionCount;
+        const collectionCount = collection.collection_size;
         const batchSize = config.mintBatchSize;
 
-        while (true) {
+        console.log('Reading tokens to mint ...')
+        const tokenMintRequests = await getTokensToMint();
 
-            console.log('Reading tokens to mint ...')
-            const tokenMintRequests = await getTokensToMint();
+        let tokensMinted = 0;
 
-            let tokensMinted = 0;
+        for (const tokenMintRequest of tokenMintRequests) {
+            const userWalletAddress = tokenMintRequest.wallet.toLowerCase();
+            let tokensToMintForCurrentUser = tokenMintRequest.tokens_allowed - tokenMintRequest.tokens_minted;
 
-            for (const tokenMintRequest of tokenMintRequests) {
-                const userWalletAddress = tokenMintRequest.wallet.toLowerCase();
-                let tokensToMintForCurrentUser = tokenMintRequest.tokens_allowed - tokenMintRequest.tokens_minted;
-
-                try {
-                    // client.mint - (without the v2 prefix) is to be deprecated and replaced by mintv2
-                    //      - this method does not include royalty information
-                    const tokensToMint = [];
-                    for (let tokenIndex = 1; tokenIndex <= tokensToMintForCurrentUser; tokenIndex++) {
-                        tokensToMint.push({
-                            // token type (ERC721 NFT)
-                            type: MintableERC721TokenType.MINTABLE_ERC721,
-                            // data describing this token
-                            data: {
-                                // address of the token's contract
-                                tokenAddress: isRopsten ? config.tokenContractAddressRopsten.toLowerCase() : config.tokenContractAddress.toLowerCase(),
-                                // ID of the token (received as the 2nd argument in mintFor), positive integer string
-                                id: '' + (lastMintedId + tokenIndex),
-                                // blueprint - can't be left empty, but if you're not going to take advantage
-                                // of on-chain metadata, just keep it to a minimum - in this case a single character
-                                // gets passed as the 3rd argument formed as {tokenId}:{blueprint (whatever you decide to put in it when calling this function)}
-                                blueprint: 'metadata',
-                            },
-                        });
-
-                        console.log(`Trying to mint token_id: #${lastMintedId + tokenIndex} ...`);
-                    }
-
-                    console.log(`Trying to mint for wallet: ${userWalletAddress} ...`);
-
-                    const result = await client.mint({
-                        mints: [
-                            {
-                                // address of the (IMX registered!) user we want to mint this token to
-                                // received as the first argument in mintFor() inside your L1 contract
-                                etherKey: userWalletAddress,
-                                // list of tokens to be minted
-                                tokens: tokensToMint,
-                                // nonce - a random positive integer (in this case a number between 0 - 1000), has to be a string!
-                                nonce: '' + Math.floor(Math.random() * 10000),
-                                // authSignature - to be left empty **ONLY BECAUSE** IMX's SDK takes care of signing it (signature must be present for EVERY SINGLE MINTing op.)
-                                authSignature: '',
-                            },
-                        ],
+            try {
+                // client.mint - (without the v2 prefix) is to be deprecated and replaced by mintv2
+                //      - this method does not include royalty information
+                const tokensToMint = [];
+                for (let tokenIndex = 1; tokenIndex <= tokensToMintForCurrentUser; tokenIndex++) {
+                    tokensToMint.push({
+                        // token type (ERC721 NFT)
+                        type: MintableERC721TokenType.MINTABLE_ERC721,
+                        // data describing this token
+                        data: {
+                            // address of the token's contract
+                            tokenAddress: collection.imx_collection_id.toLowerCase(),
+                            // ID of the token (received as the 2nd argument in mintFor), positive integer string
+                            id: '' + (lastMintedId + tokenIndex),
+                            // blueprint - can't be left empty, but if you're not going to take advantage
+                            // of on-chain metadata, just keep it to a minimum - in this case a single character
+                            // gets passed as the 3rd argument formed as {tokenId}:{blueprint (whatever you decide to put in it when calling this function)}
+                            blueprint: 'metadata',
+                        },
                     });
 
-                    console.log('Minting success!', result);
-
-                    // update database token_tracker and user record
-                    lastMintedId += tokensToMintForCurrentUser;
-                    await updateLastMintedTokenId(lastMintedId);
-
-                    tokensMinted += tokensToMintForCurrentUser;
-                    await updateUserTokensMinted(tokenMintRequest.id, (tokenMintRequest.tokens_minted + tokensToMintForCurrentUser), result);
-
-                    if (tokensMinted >= batchSize) {
-                        console.log(`Batch limit size of ${batchSize} mints exceeded!`);
-                        process.exit(0);
-                    }
-
-                    if (lastMintedId >= collectionCount) {
-                        console.log('Collection limit reached!');
-                        process.exit(0);
-                    }
-
-                    // operation can fail if the request is malformed or the tokenId provided already exists
-                } catch(err) {
-                    console.error(`Minting failed for wallet ${userWalletAddress}. Make sure the asset you're trying to mint doesn't already exist!`);
-                    console.error('The following error was provided', err);
+                    console.log(`Trying to mint token_id: #${lastMintedId + tokenIndex} ...`);
                 }
-            }
 
-            await sleep(5000);
+                console.log(`Trying to mint for wallet: ${userWalletAddress} ...`);
+
+                const result = await client.mint({
+                    mints: [
+                        {
+                            // address of the (IMX registered!) user we want to mint this token to
+                            // received as the first argument in mintFor() inside your L1 contract
+                            etherKey: userWalletAddress,
+                            // list of tokens to be minted
+                            tokens: tokensToMint,
+                            // nonce - a random positive integer (in this case a number between 0 - 1000), has to be a string!
+                            nonce: '' + Math.floor(Math.random() * 10000),
+                            // authSignature - to be left empty **ONLY BECAUSE** IMX's SDK takes care of signing it (signature must be present for EVERY SINGLE MINTing op.)
+                            authSignature: '',
+                        },
+                    ],
+                });
+
+                console.log('Minting success!', result);
+
+                // update database token_tracker and user record
+                lastMintedId += tokensToMintForCurrentUser;
+                await updateLastMintedTokenId(lastMintedId);
+
+                tokensMinted += tokensToMintForCurrentUser;
+                await updateUserTokensMinted(tokenMintRequest.id, (tokenMintRequest.tokens_minted + tokensToMintForCurrentUser), result);
+
+                if (lastMintedId >= collectionCount) {
+                    console.log('Collection limit reached!');
+                    return {error: 'Collection limit reached!'};
+                }
+
+                // operation can fail if the request is malformed or the tokenId provided already exists
+            } catch(err) {
+                console.error(`Minting failed for wallet ${userWalletAddress}. Make sure the asset you're trying to mint doesn't already exist!`);
+                console.error('The following error was provided', err);
+            }
         }
+
+        return {success: true, tokensMinted};
     }
 
-    main();
+    const mintResult = await main();
+
+    return res.status(200).json({result: mintResult});
 }
 
