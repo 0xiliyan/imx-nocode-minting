@@ -5,6 +5,7 @@ import { ImmutableXClient, MintableERC721TokenType } from '@imtbl/imx-sdk';
 import { AlchemyProvider } from '@ethersproject/providers';
 import { Wallet } from '@ethersproject/wallet';
 import {getImxSDK} from "../../helpers/utils";
+import * as t from "io-ts";
 
 export default function handler(req, res) {
     if (req.method === 'POST') {
@@ -129,42 +130,58 @@ const mint = async (req, res) => {
                 //      - this method does not include royalty information
                 const tokensToMint = [];
                 for (let tokenIndex = 1; tokenIndex <= tokensToMintForCurrentUser; tokenIndex++) {
-                    tokensToMint.push({
+                    let tokenToMint = {
                         // token type (ERC721 NFT)
-                        type: MintableERC721TokenType.MINTABLE_ERC721,
+                        // type: MintableERC721TokenType.MINTABLE_ERC721,
                         // data describing this token
-                        data: {
-                            // address of the token's contract
-                            tokenAddress: collection.imx_collection_id.toLowerCase(),
-                            // ID of the token (received as the 2nd argument in mintFor), positive integer string
-                            id: '' + (lastMintedId + tokenIndex),
-                            // blueprint - can't be left empty, but if you're not going to take advantage
-                            // of on-chain metadata, just keep it to a minimum - in this case a single character
-                            // gets passed as the 3rd argument formed as {tokenId}:{blueprint (whatever you decide to put in it when calling this function)}
-                            blueprint: 'metadata',
-                        },
-                    });
+                        // address of the token's contract
+                        // tokenAddress: collection.imx_collection_id.toLowerCase(),
+                        // ID of the token (received as the 2nd argument in mintFor), positive integer string
+                        id: '' + (lastMintedId + tokenIndex),
+                        // blueprint - can't be left empty, but if you're not going to take advantage
+                        // of on-chain metadata, just keep it to a minimum - in this case a single character
+                        // gets passed as the 3rd argument formed as {tokenId}:{blueprint (whatever you decide to put in it when calling this function)}
+                        blueprint: 'metadata',
+                    };
+
+                    // add royalties if specified
+                    if (collection.royalty_receiver_address && collection.royalty_percentage) {
+                        tokenToMint.royalties = [{recipient: collection.royalty_receiver_address, percentage: collection.royalty_percentage}];
+                    }
+
+                    tokensToMint.push(tokenToMint);
 
                     console.log(`Trying to mint token_id: #${lastMintedId + tokenIndex} ...`);
                 }
 
                 console.log(`Trying to mint for wallet: ${userWalletAddress} ...`);
 
-                const result = await client.mint({
-                    mints: [
+                const result = await client.mintV2([{
+                    "users": [
                         {
-                            // address of the (IMX registered!) user we want to mint this token to
-                            // received as the first argument in mintFor() inside your L1 contract
-                            etherKey: userWalletAddress,
-                            // list of tokens to be minted
-                            tokens: tokensToMint,
-                            // nonce - a random positive integer (in this case a number between 0 - 1000), has to be a string!
-                            nonce: '' + Math.floor(Math.random() * 10000),
-                            // authSignature - to be left empty **ONLY BECAUSE** IMX's SDK takes care of signing it (signature must be present for EVERY SINGLE MINTing op.)
-                            authSignature: '',
-                        },
+                            "tokens": tokensToMint,
+                            "etherKey": userWalletAddress
+                            // [{
+                            //     "blueprint": "string",
+                            //     "id": "string",
+                            //     "royalties": [
+                            //         {
+                            //             "percentage": 100,
+                            //             "recipient": "string"
+                            //         }
+                            //     ]
+                            // }],
+                        }
                     ],
-                });
+                    "contractAddress": collection.imx_collection_id,
+                    // global contract level royalties
+                    "royalties": [
+                        {
+                            "percentage": 2,
+                            "recipient": "0x18a17813021aF3096F0BFFF9BA09Da6Aab82Ac96"
+                        }
+                    ],
+                }]);
 
                 console.log('Minting success!', result);
 

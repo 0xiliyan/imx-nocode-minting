@@ -11,6 +11,13 @@ import {Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr} from "@ch
 import moment from "moment";
 import config from "../../../config";
 
+const MintedTokenId = styled.a`
+    background: #3182CE;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+`
+
 const Mint = () => {
     const router = useRouter();
 
@@ -112,9 +119,10 @@ const Mint = () => {
             <Heading as="h4" size="sm" mb={15}>Automatically reads Airdrop requests as well imported into database</Heading>
             <Box mt="25">
                 <Section>
-                    <Text mb={15}>Collection is set up to accept payment transactions on <b>{collection.mint_deposit_layer == 'l1' ? 'Ethereum L1' : 'ImmutableX L2'}</b> to the following deposit address: <b>{collection.mint_deposit_address}</b>.
+                    <Text>Collection is set up to accept NFT payment transactions for mints on <b>{collection.mint_deposit_layer == 'l1' ? 'Ethereum L1' : 'ImmutableX L2'}</b> to the following deposit address: <b>{collection.mint_deposit_address}</b>.
                     Mint cost is <b>{collection.mint_cost} ETH</b>.
                     </Text>
+                    <Text mb={15}>Collection contract address on IMX is: <a href={`https://api.${config.appNetwork == 'ropsten' ? 'ropsten.' : ''}x.immutable.com/v1/assets?collection=${collection.imx_collection_id}&order_by=updated_at`} target="_blank"><b>{collection.imx_collection_id}</b></a>.</Text>
                     <Button colorScheme="blue" onClick={readPaymentTransactions} isLoading={isLoading}>Read Payment Transactions</Button>
                 </Section>
             </Box>
@@ -159,6 +167,7 @@ const Mint = () => {
                                 </Table>
                             </TableContainer>
                             <Button colorScheme="blue" onClick={readPaymentTransactions} isLoading={isLoading} mt={35} onClick={mint}>Mint NFTs</Button>
+                            {collection.royalty_receiver_address && collection.royalty_percentage && <Text my={15}>Royalty percentage of <b>{collection.royalty_percentage}%</b> will be included for wallet: <b>{collection.royalty_receiver_address}</b>.</Text>}
                             {mintingResult}
                         </>
                     }
@@ -185,7 +194,7 @@ const Mint = () => {
                                 <Tbody>
                                     {mintedTokens.map(mint => {
                                         const metadata = JSON.parse(mint.metadata);
-                                        const tokenIds = metadata ? metadata.results.map(result => result.token_id).join(', ') : '';
+                                        const tokenIds = metadata ? metadata.results.map(result => <MintedTokenId href={`https://api.${config.appNetwork == 'ropsten' ? 'ropsten.' : ''}x.immutable.com/v1/assets/${collection.imx_collection_id}/${result.token_id}`} target="_blank" style={{ marginRight: '10px'}}>{result.token_id}</MintedTokenId>) : '';
 
                                         return <Tr key={mint.id}>
                                             <Td>{mint.wallet}</Td>

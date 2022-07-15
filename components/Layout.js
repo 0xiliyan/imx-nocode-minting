@@ -55,23 +55,27 @@ const Layout = ({children}) => {
                     </LinkItem>
                     {config.generalConfigUpdated &&
                     <>
-                        {!config.databaseImported &&
-                        <LinkItem>
-                            <Link href="/import-db">
-                                <Button variant="ghost" colorScheme="gray">Import Database</Button>
-                            </Link>
-                        </LinkItem>
+                        {!config.databaseImported ?
+                            <LinkItem>
+                                <Link href="/import-db">
+                                    <Button variant="ghost" colorScheme="gray">Import Database</Button>
+                                </Link>
+                            </LinkItem> :
+                            <>
+                                <LinkItem>
+                                    <Link href="/deploy-contract">
+                                        <Button variant="ghost" colorScheme="gray">Deploy Contract</Button>
+                                    </Link>
+                                </LinkItem>
+                                {config.tokenContractAddress && config.tokenContractNetwork == config.appNetwork &&
+                                    <LinkItem>
+                                        <Link href="/collections">
+                                            <Button variant="ghost" colorScheme="gray">NFT Collections</Button>
+                                        </Link>
+                                    </LinkItem>
+                                }
+                            </>
                         }
-                        <LinkItem>
-                            <Link href="/deploy-contract">
-                                <Button variant="ghost" colorScheme="gray">Deploy Contract</Button>
-                            </Link>
-                        </LinkItem>
-                        <LinkItem>
-                            <Link href="/collections">
-                                <Button variant="ghost" colorScheme="gray">NFT Collections</Button>
-                            </Link>
-                        </LinkItem>
                     </>
                     }
                 </Header>

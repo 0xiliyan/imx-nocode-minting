@@ -46,6 +46,8 @@ const UpdateCollection = () => {
                 max_mints_per_user: collection.max_mints_per_user,
                 mint_deposit_address: collection.mint_deposit_address,
                 mint_deposit_layer: collection.mint_deposit_layer,
+                royalty_receiver_address: collection.royalty_receiver_address,
+                royalty_percentage: collection.royalty_percentage,
             });
 
             if (response.data.collection_id) {
@@ -118,6 +120,16 @@ const UpdateCollection = () => {
                             <option value='l1'>Ethereum (ETH L1)</option>
                             <option value='l2'>ImmutableX (ETH L2)</option>
                         </Select>
+                    </FormControl>
+                    <FormControl mb="5">
+                        <FormLabel htmlFor='email'>Royalty Wallet Address (optional)</FormLabel>
+                        <Input onChange={(e) => setCollection(prevState => ({...prevState, royalty_receiver_address: e.target.value}))} value={collection.royalty_receiver_address} />
+                        <FormHelperText>Wallet that is going to receive royalty commissions from NFT sales</FormHelperText>
+                    </FormControl>
+                    <FormControl mb="5">
+                        <FormLabel htmlFor='email'>Royalty Percentage (optional)</FormLabel>
+                        <Input onChange={(e) => setCollection(prevState => ({...prevState, royalty_percentage: e.target.value}))} value={collection.royalty_percentage} />
+                        <FormHelperText>How much is the royalty commission? Between 1 to 4 is a common percentage</FormHelperText>
                     </FormControl>
                     <Button colorScheme="blue" onClick={saveCollection} isLoading={isLoading}>
                         Update Collection

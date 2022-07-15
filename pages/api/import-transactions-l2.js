@@ -36,14 +36,17 @@ const importTransactionsL2 = async (req, res) => {
             const etherValue = parseFloat(ethers.utils.formatEther(transaction.token.data.quantity));
             const tokensAllowed = etherValue / collection.mint_cost;
 
-            await connection.query('INSERT INTO mints SET collection_id = ?, tx_hash = ?, wallet = ?, tokens_allowed = ?, tx_ether_value = ?',
-                [collectionId, transaction.transaction_id, transaction.user, tokensAllowed, etherValue], (error, results, fields) => {
-                    if (error) {
-                        // console.log(error);
-                    } else {
-                        console.log(`Transfer from wallet ${transaction.user} for ${etherValue} has been imported. IMX Transaction hash: ${transaction.transaction_id}`);
-                    }
+            // at least one token is allowed to be minted
+            if (tokensAllowed >= 1) {
+                await connection.query('INSERT INTO mints SET collection_id = ?, tx_hash = ?, wallet = ?, tokens_allowed = ?, tx_ether_value = ?',
+                    [collectionId, transaction.transaction_id, transaction.user, tokensAllowed, etherValue], (error, results, fields) => {
+                        if (error) {
+                            // console.log(error);
+                        } else {
+                            console.log(`Transfer from wallet ${transaction.user} for ${etherValue} has been imported. IMX Transaction hash: ${transaction.transaction_id}`);
+                        }
                 });
+            }
         });
 
         // cursor for next page
