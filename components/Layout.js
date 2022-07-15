@@ -45,8 +45,12 @@ const Layout = ({children}) => {
     return (
         <ChakraProvider>
             <Flex align="center" background="white" p={3}>
-                <Img src="/img/imx-nocode-minter.png" height="65px" />
-                    <AppNetwork>{config.appNetwork.charAt(0).toUpperCase() + config.appNetwork.slice(1)}</AppNetwork>
+                <Link href="/">
+                    <a>
+                    <Img src="/img/imx-nocode-minter.png" height="65px" />
+                    </a>
+                </Link>
+                <AppNetwork>{config.appNetwork.charAt(0).toUpperCase() + config.appNetwork.slice(1)}</AppNetwork>
                 <Header>
                     <LinkItem>
                         <Link href="/">
