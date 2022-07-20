@@ -8,7 +8,7 @@ This is a no-code minting backend for ImmutableX, which lets you create collecti
 2\. Clone this project from the repository and install its dependencies:
 
 ```bash
-npm run install
+npm install
 ```
 
 3\. Copy **config.example.js** to **config.js**
