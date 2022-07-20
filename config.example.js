@@ -1,6 +1,6 @@
 // it is not recommended to edit this configuration directly, use the provided UI instead
 export default {
-    appNetwork: 'mainnet',
+    appNetwork: 'ropsten',
     // database
     dbHost: '',
     dbName: '',
