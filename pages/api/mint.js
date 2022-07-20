@@ -51,7 +51,7 @@ const mint = async (req, res) => {
 
     const getLastMintedTokenId = () => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT last_token_id FROM token_trackers WHERE collection_id = ?',
+            connection.query('SELECT last_token_id FROM collections WHERE id = ?',
                 [collectionId], (error, results, fields) => {
                     if (error) {
                         reject();
@@ -65,7 +65,7 @@ const mint = async (req, res) => {
 
     const updateLastMintedTokenId = (newTokenId) => {
         return new Promise((resolve, reject) => {
-            connection.query('UPDATE token_trackers SET last_token_id = ? WHERE collection_id = ?',
+            connection.query('UPDATE collections SET last_token_id = ? WHERE id = ?',
                 [newTokenId, collectionId], (error, results, fields) => {
                     if (error) {
                         reject();
@@ -204,7 +204,7 @@ const mint = async (req, res) => {
             }
         }
 
-        return {success: true, tokensMinted};
+        return {success: true, tokensMinted, lastMintedId};
     }
 
     const mintResult = await main();

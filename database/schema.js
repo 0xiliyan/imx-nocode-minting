@@ -35,24 +35,11 @@ export default {
             \`mint_deposit_layer\` varchar(255) NOT NULL,
             \`royalty_receiver_address\` varchar(255),
             \`royalty_percentage\` decimal(5, 2),
+            \`last_token_id\` int DEFAULT 0,
             PRIMARY KEY (\`id\`),
             KEY \`collections_FK\` (\`project_id\`),
             CONSTRAINT \`collections_FK\` FOREIGN KEY (\`project_id\`) REFERENCES \`projects\` (\`id\`) ON DELETE CASCADE ON UPDATE CASCADE
         );
-
-        CREATE TABLE \`token_trackers\`
-        (
-            \`id\`            bigint NOT NULL AUTO_INCREMENT,
-            \`collection_id\`    bigint NOT NULL,
-            \`last_token_id\` int DEFAULT NULL,
-            PRIMARY KEY (\`id\`),
-            KEY \`token_trackers_FK\` (\`collection_id\`),
-            CONSTRAINT \`token_trackers_FK\` FOREIGN KEY (\`collection_id\`) REFERENCES \`collections\` (\`id\`) ON DELETE CASCADE ON UPDATE CASCADE
-        ) ENGINE = InnoDB
-          AUTO_INCREMENT = 3
-          DEFAULT CHARSET = utf8mb4
-          COLLATE = utf8mb4_0900_ai_ci;
-
         
         CREATE TABLE \`mints\`
         (

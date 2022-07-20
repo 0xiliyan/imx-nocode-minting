@@ -6,6 +6,7 @@ import styled, { css } from 'styled-components';
 import {Tab, TabList, Tabs} from "@chakra-ui/tabs";
 import config from "../config";
 import {Img} from "@chakra-ui/image";
+import {useRouter} from "next/router";
 
 const Header = styled.div`
     display: flex;
@@ -42,6 +43,8 @@ const AppNetwork = styled.div`
 `
 
 const Layout = ({children}) => {
+    const router = useRouter();
+
     return (
         <ChakraProvider>
             <Flex align="center" background="white" p={3}>
@@ -54,7 +57,7 @@ const Layout = ({children}) => {
                 <Header>
                     <LinkItem>
                         <Link href="/">
-                            <Button variant="ghost" colorScheme="gray">General Config</Button>
+                            <Button variant={router.pathname === '/' ? 'solid' : 'ghost'} colorScheme="gray">General Config</Button>
                         </Link>
                     </LinkItem>
                     {config.generalConfigUpdated &&
@@ -62,19 +65,19 @@ const Layout = ({children}) => {
                         {!config.databaseImported ?
                             <LinkItem>
                                 <Link href="/import-db">
-                                    <Button variant="ghost" colorScheme="gray">Import Database</Button>
+                                    <Button variant={router.pathname.includes('/import-db') ? 'solid' : 'ghost'} colorScheme="gray">Import Database</Button>
                                 </Link>
                             </LinkItem> :
                             <>
                                 <LinkItem>
                                     <Link href="/deploy-contract">
-                                        <Button variant="ghost" colorScheme="gray">Deploy Contract</Button>
+                                        <Button variant={router.pathname.includes('/deploy-contract') ? 'solid' : 'ghost'} colorScheme="gray">Deploy Contract</Button>
                                     </Link>
                                 </LinkItem>
                                 {config.tokenContractAddress && config.tokenContractNetwork == config.appNetwork &&
                                     <LinkItem>
                                         <Link href="/collections">
-                                            <Button variant="ghost" colorScheme="gray">NFT Collections</Button>
+                                            <Button variant={router.pathname.includes('/collections') ? 'solid' : 'ghost'} colorScheme="gray">NFT Collections</Button>
                                         </Link>
                                     </LinkItem>
                                 }

@@ -22,6 +22,7 @@ const Mint = () => {
     const router = useRouter();
 
     const [collection, setCollection] = useState({});
+    const [lastTokenId, setLastTokenId] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [mintedTokens, setMintedTokens] = useState([]);
     const [notMintedTokens, setNotMintedTokens] = useState([]);
@@ -53,6 +54,7 @@ const Mint = () => {
     const getCollection = async () => {
         const {data} = await axios.get(`/api/collections/${router.query.id}`);
         setCollection(data);
+        setLastTokenId(data.last_token_id);
     }
 
     const readPaymentTransactions = async () => {
@@ -78,12 +80,14 @@ const Mint = () => {
             setMintingResult(<Box mt={15}><b><Text color="red" as="span">Error:</Text> {data.result.error}</b></Box>);
         }
         else if (data.result.success) {
-            setMintingResult(<Box mt={15}><b><Text color="green" as="span">Success</Text>: {data.result.tokensMinted} tokens minted</b>. (please note that all wallets pending mints must be registered on IMX)</Box>)
+            setMintingResult(<Box mt={15}><b><Text color="green" as="span">Success</Text>: {data.result.tokensMinted} tokens minted</b>. (please note that all wallets pending mints must be registered on IMX)</Box>);
+            setLastTokenId(data.result.lastMintedId);
+
+            // load minted and not minted tokens
+            await getNotMintedTokens();
+            await getMintedTokens();
         }
 
-        // load minted and not minted tokens
-        await getNotMintedTokens();
-        await getMintedTokens();
         setIsLoading(false);
     }
 
@@ -217,7 +221,7 @@ const Mint = () => {
                     <Heading as="h3" size="md" mt={35}>Last Minted Token ID</Heading>
                     <Box mt="25">
                         <Section>
-                          <b>{collection.last_token_id ? collection.last_token_id : 'n/a'}</b>
+                          <b>{lastTokenId ?? 'n/a'}</b>
                         </Section>
                     </Box>
                 </>

@@ -15,7 +15,7 @@ export default function handler(req, res) {
 }
 
 const getCollection = async (req, res) => {
-    const result = await connection.query("SELECT collections.*, token_trackers.last_token_id FROM collections LEFT JOIN token_trackers ON token_trackers.collection_id = collections.id WHERE collections.id = ?",
+    const result = await connection.query("SELECT * FROM collections WHERE id = ?",
         [req.query.id]
     );
     return res.status(200).json(result[0]);
@@ -48,7 +48,7 @@ const updateCollection = async (req, res) => {
                 mint_deposit_address: req.body.mint_deposit_address,
                 mint_deposit_layer: req.body.mint_deposit_layer,
                 royalty_receiver_address: req.body.royalty_receiver_address,
-                royalty_percentage: parseFloat(req.body.royalty_percentage),
+                royalty_percentage: req.body.royalty_percentage ? parseFloat(req.body.royalty_percentage) : null,
             }, req.query.id]);
 
         return res.status(200).json({collection_id: req.query.id});
