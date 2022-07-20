@@ -11,12 +11,14 @@ This is a no-code minting backend for ImmutableX, which lets you create collecti
 npm run install
 ```
 
-3\. Build the project and follow the wizard:
+3\. Copy **config.example.js** to **config.js**
+
+4\. Build the project and follow the wizard:
 
 ```bash
 npm run dev
 ```
-4\. Create your collections either on Testnet or Mainnet and mint NFTs. Thanks to gas free minting and trading on ImmutableX Layer 2 scaling solution with the security of Ethereum!
+5\. Create your collections either on Testnet or Mainnet and mint NFTs. Thanks to gas free minting and trading on ImmutableX Layer 2 scaling solution with the security of Ethereum!
 
 #
 
