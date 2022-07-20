@@ -18,3 +18,7 @@ npm run dev
 ```
 4\. Create your collections either on Testnet or Mainnet and mint NFTs. Thanks to gas free minting and trading on ImmutableX Layer 2 scaling solution with the security of Ethereum!
 
+#
+
+*If you need any custom development or consultancy for your project you can contact me at **iliyan#1066** on Discord.* 
+
