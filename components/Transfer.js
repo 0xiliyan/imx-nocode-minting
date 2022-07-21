@@ -1,7 +1,7 @@
 import { Link, ETHTokenType } from '@imtbl/imx-sdk'
 import React, { useState, useEffect } from 'react'
 import config from "../config";
-import {useLinkSDK} from "../pages/hooks/useLinkSDK";
+import {useLinkSDK} from "./hooks/useLinkSDK";
 import { Button, Input } from '@chakra-ui/react'
 
 const Transfer = () => {

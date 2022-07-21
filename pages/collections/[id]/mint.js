@@ -10,6 +10,7 @@ import {Section} from "../../../components/Layout";
 import {Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/table";
 import moment from "moment";
 import config from "../../../config";
+import {Checkbox} from "@chakra-ui/checkbox";
 
 const MintedTokenId = styled.a`
     background: #3182CE;
@@ -30,6 +31,7 @@ const Mint = () => {
     const [mintedSearch, setMintedSearch] = useState('');
     const [mintingResult, setMintingResult] = useState(null);
     const [walletRegistrationStatus, setWalletRegistrationStatus] = useState({});
+    const [includeAuthorRoyalties, setIncludeAuthorRoyalties] = useState(true);
 
     useEffect(() => {
         if (router.query.id) {
@@ -73,7 +75,8 @@ const Mint = () => {
         setMintingResult('');
         setIsLoading(true);
         const {data} = await axios.post(`/api/mint`, {
-            collection_id: collection.id
+            collection_id: collection.id,
+            includeAuthorRoyalties
         });
 
         if (data.result.error) {
@@ -126,7 +129,7 @@ const Mint = () => {
                     <Text>Collection is set up to accept NFT payment transactions for mints on <b>{collection.mint_deposit_layer == 'l1' ? 'Ethereum L1' : 'ImmutableX L2'}</b> to the following deposit address: <b>{collection.mint_deposit_address}</b>.
                     Mint cost is <b>{collection.mint_cost} ETH</b>.
                     </Text>
-                    <Text mb={15}>Collection contract address on IMX is: <a href={`https://api.${config.appNetwork == 'ropsten' ? 'ropsten.' : ''}x.immutable.com/v1/assets?collection=${collection.imx_collection_id}&order_by=updated_at`} target="_blank"><b>{collection.imx_collection_id}</b></a>.</Text>
+                    <Text mb={15}>Collection contract address on IMX is: <a href={`https://api.${config.appNetwork == 'ropsten' ? 'ropsten.' : ''}x.immutable.com/v1/mints?token_address=${collection.imx_collection_id}`} target="_blank"><b>{collection.imx_collection_id}</b></a>.</Text>
                     <Button colorScheme="blue" onClick={readPaymentTransactions} isLoading={isLoading}>Read Payment Transactions</Button>
                 </Section>
             </Box>
@@ -170,7 +173,10 @@ const Mint = () => {
                                     </Tbody>
                                 </Table>
                             </TableContainer>
-                            <Button colorScheme="blue" onClick={readPaymentTransactions} isLoading={isLoading} mt={35} onClick={mint}>Mint NFTs</Button>
+                            <Box mt={5} color="gray">
+                                <Checkbox isChecked={includeAuthorRoyalties} onChange={(e) => setIncludeAuthorRoyalties(e.target.checked)} size="sm" colorScheme="gray">Include 2% royalties for nocode mint tool author to support this project</Checkbox>
+                            </Box>
+                            <Button colorScheme="blue" onClick={readPaymentTransactions} isLoading={isLoading} mt={25} onClick={mint}>Mint NFTs</Button>
                             {collection.royalty_receiver_address && collection.royalty_percentage && <Text my={15}>Royalty percentage of <b>{collection.royalty_percentage}%</b> will be included for wallet: <b>{collection.royalty_receiver_address}</b>.</Text>}
                             {mintingResult}
                         </>

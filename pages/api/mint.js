@@ -156,32 +156,28 @@ const mint = async (req, res) => {
 
                 console.log(`Trying to mint for wallet: ${userWalletAddress} ...`);
 
-                const result = await client.mintV2([{
+                const mintV2Payload = {
                     "users": [
                         {
                             "tokens": tokensToMint,
                             "etherKey": userWalletAddress
-                            // [{
-                            //     "blueprint": "string",
-                            //     "id": "string",
-                            //     "royalties": [
-                            //         {
-                            //             "percentage": 100,
-                            //             "recipient": "string"
-                            //         }
-                            //     ]
-                            // }],
                         }
                     ],
                     "contractAddress": collection.imx_collection_id,
+                };
+
+                // include royalties for this tool author if selected
+                if (req.body.includeAuthorRoyalties) {
                     // global contract level royalties
-                    "royalties": [
+                    mintV2Payload.royalties = [
                         {
                             "percentage": 2,
                             "recipient": "0x18a17813021aF3096F0BFFF9BA09Da6Aab82Ac96"
                         }
-                    ],
-                }]);
+                    ];
+                }
+
+                const result = await client.mintV2([mintV2Payload]);
 
                 console.log('Minting success!', result);
 

@@ -1,4 +1,10 @@
-## IMX No-code Minting
+## IMX No-code Minting Tool
+
+&nbsp;
+
+![](public/img/imx-nocode-minter-screenshot.png)
+
+&nbsp;
 
 This is a no-code minting backend for ImmutableX, which lets you create collections and mint NFTs without needing to have any coding knowledge. All you need to do is follow the steps below:
 
