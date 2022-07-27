@@ -1,4 +1,4 @@
-## IMX No-code Minting Tool
+## IMX No-code Minting Tool ![](public/img/imx-logo.png)
 
 &nbsp;
 
